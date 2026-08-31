@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HKO OCF Temperature Forecast</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      line-height: 1.5;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fa;
+      color: #1f2933;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+    }
+
+    .meta {
+      margin-bottom: 20px;
+      color: #52606d;
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 360px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e4e7eb;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f4f8;
+      position: sticky;
+      top: 0;
+    }
+
+    .table-wrap {
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .error {
+      color: #d64545;
+      font-weight: 600;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #0f1720;
+        color: #e5e7eb;
+      }
+
+      .meta {
+        color: #94a3b8;
+      }
+
+      .panel {
+        background: #111827;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      }
+
+      th {
+        background: #1f2937;
+      }
+
+      th,
+      td {
+        border-bottom-color: #334155;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>HKO OCF Temperature Forecast</h1>
+    <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
+
+    <section class="panel">
+      <div class="chart-wrap">
+        <canvas id="temperatureChart"></canvas>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Temperature Points</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Time</th>
+              <th>Temp (°C)</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const REFRESH_MS = 5 * 60 * 1000;
+    let chart;
+
+    function formatCompactTimestamp(value) {
+      if (value == null) {
+        return "unknown";
+      }
+
+      const text = String(value);
+      if (text.length === 10) {
+        return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)} ${text.slice(8, 10)}:00`;
+      }
+      if (text.length === 12) {
+        return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)} ${text.slice(8, 10)}:${text.slice(10, 12)}`;
+      }
+      return text;
+    }
+
+    function formatDisplayTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
+      return date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
+
+    function renderSummary(data) {
+      const pointCount = data.temperaturePoints?.length ?? 0;
+      document.getElementById("summary").textContent =
+        `Station ${data.stationCode} | ${pointCount} temperature points | ` +
+        `Model ${formatCompactTimestamp(data.modelTime)} | ` +
+        `Updated ${formatCompactTimestamp(data.lastModified)} | ` +
+        `Fetched ${formatDisplayTime(data.fetchedAt)} | Auto-refresh every 5 minutes`;
+    }
+
+    function renderTable(points) {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = points.map((point, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${formatDisplayTime(point.forecastTime)}</td>
+          <td>${Number(point.temperatureC).toFixed(1)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderChart(points) {
+      const labels = points.map((point) => formatDisplayTime(point.forecastTime));
+      const values = points.map((point) => point.temperatureC);
+      const canvas = document.getElementById("temperatureChart");
+
+      if (chart) {
+        chart.destroy();
+      }
+
+      chart = new Chart(canvas, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "Temperature (°C)",
+            data: values,
+            borderColor: "#e74c3c",
+            backgroundColor: "rgba(231, 76, 60, 0.12)",
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.2,
+            fill: false,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: "index",
+            intersect: false,
+          },
+          scales: {
+            x: {
+              ticks: {
+                maxTicksLimit: 10,
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "°C",
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+        },
+      });
+    }
+
+    async function loadData() {
+      const summary = document.getElementById("summary");
+      try {
+        const response = await fetch(`./data.json?ts=${Date.now()}`);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const points = data.temperaturePoints ?? [];
+        renderSummary(data);
+
+        if (points.length === 0) {
+          summary.textContent += " | No temperature points available yet.";
+          renderTable([]);
+          return;
+        }
+
+        renderChart(points);
+        renderTable(points);
+      } catch (error) {
+        summary.innerHTML = `<span class="error">Failed to load HKO forecast: ${error.message}</span>`;
+      }
+    }
+
+    loadData();
+    setInterval(loadData, REFRESH_MS);
+  </script>
+</body>
+</html>

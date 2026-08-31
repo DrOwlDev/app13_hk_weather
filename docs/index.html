@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HKO OCF Temperature Forecast</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
     :root {
       color-scheme: light dark;
@@ -75,6 +76,43 @@
       font-weight: 600;
     }
 
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .actions button,
+    .actions a.button {
+      appearance: none;
+      border: 1px solid #0b6396;
+      background: #0b6396;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .actions a.button.secondary {
+      background: transparent;
+      color: #0b6396;
+    }
+
+    .actions button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #refreshStatus {
+      color: #52606d;
+      font-size: 0.95rem;
+    }
+
     @media (prefers-color-scheme: dark) {
       body {
         background: #0f1720;
@@ -98,12 +136,24 @@
       td {
         border-bottom-color: #334155;
       }
+
+      .actions a.button.secondary {
+        color: #7dd3fc;
+        border-color: #7dd3fc;
+      }
     }
   </style>
 </head>
 <body>
   <main>
     <h1>HKO OCF Temperature Forecast</h1>
+    <div class="actions">
+      <button id="triggerRefreshBtn" type="button">Trigger data refresh</button>
+      <a id="actionsLink" class="button secondary" href="https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml" target="_blank" rel="noopener noreferrer">
+        Open GitHub Actions
+      </a>
+      <span id="refreshStatus"></span>
+    </div>
     <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
 
     <section class="panel">
@@ -131,7 +181,85 @@
 
   <script>
     const REFRESH_MS = 5 * 60 * 1000;
+    const DEFAULT_ACTIONS_URL =
+      "https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml";
     let chart;
+    let siteConfig = {
+      actionsWorkflowUrl: DEFAULT_ACTIONS_URL,
+      refreshProxyUrl: "",
+    };
+
+    async function loadConfig() {
+      try {
+        const response = await fetch(`./config.json?ts=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) {
+          return;
+        }
+        siteConfig = { ...siteConfig, ...(await response.json()) };
+      } catch (_) {
+        // Fall back to defaults baked into the page.
+      }
+
+      const actionsLink = document.getElementById("actionsLink");
+      if (siteConfig.actionsWorkflowUrl) {
+        actionsLink.href = siteConfig.actionsWorkflowUrl;
+      }
+
+      const triggerBtn = document.getElementById("triggerRefreshBtn");
+      if (!siteConfig.refreshProxyUrl) {
+        triggerBtn.title = "Configure refreshProxyUrl in config.json or use Open GitHub Actions";
+      }
+    }
+
+    async function triggerWorkflowRefresh() {
+      const status = document.getElementById("refreshStatus");
+      const button = document.getElementById("triggerRefreshBtn");
+
+      if (!siteConfig.refreshProxyUrl) {
+        window.open(siteConfig.actionsWorkflowUrl || DEFAULT_ACTIONS_URL, "_blank", "noopener,noreferrer");
+        status.textContent = "Opened GitHub Actions — click Run workflow to refresh.";
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = "Triggering workflow...";
+
+      try {
+        const response = await fetch(siteConfig.refreshProxyUrl, { method: "GET" });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload.error || `HTTP ${response.status}`);
+        }
+        status.textContent = payload.message || "Workflow triggered. Data will update in ~1 minute.";
+        setTimeout(loadData, 60000);
+      } catch (error) {
+        status.innerHTML = `<span class="error">Refresh trigger failed: ${error.message}</span>`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function parseForecastTime(value) {
+      const [datePart, timePart] = value.split("T");
+      const [y, m, d] = datePart.split("-").map(Number);
+      const [hh, mm = 0] = timePart.split(":").map(Number);
+      return new Date(y, m - 1, d, hh, mm, 0, 0);
+    }
+
+    function getChartTimeWindow(reference = new Date()) {
+      const start = new Date(reference);
+      const end = new Date(reference);
+      end.setDate(end.getDate() + 1);
+      end.setHours(23, 59, 0, 0);
+      return { start, end };
+    }
+
+    function filterPointsByWindow(points, window) {
+      return points.filter((point) => {
+        const time = parseForecastTime(point.forecastTime);
+        return time >= window.start && time <= window.end;
+      });
+    }
 
     function formatCompactTimestamp(value) {
       if (value == null) {
@@ -149,9 +277,21 @@
     }
 
     function formatDisplayTime(value) {
-      const date = new Date(value);
+      let date;
+      if (value instanceof Date) {
+        date = value;
+      } else if (
+        typeof value === "string" &&
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value) &&
+        !/[+-]\d{2}:\d{2}$/.test(value) &&
+        !value.endsWith("Z")
+      ) {
+        date = parseForecastTime(value);
+      } else {
+        date = new Date(value);
+      }
       if (Number.isNaN(date.getTime())) {
-        return value;
+        return String(value);
       }
       return date.toLocaleString(undefined, {
         year: "numeric",
@@ -163,10 +303,11 @@
       });
     }
 
-    function renderSummary(data) {
-      const pointCount = data.temperaturePoints?.length ?? 0;
+    function renderSummary(data, visibleCount, window) {
+      const totalCount = data.temperaturePoints?.length ?? 0;
       document.getElementById("summary").textContent =
-        `Station ${data.stationCode} | ${pointCount} temperature points | ` +
+        `Station ${data.stationCode} | Showing ${visibleCount} of ${totalCount} points ` +
+        `(${formatDisplayTime(window.start)} → ${formatDisplayTime(window.end)}) | ` +
         `Model ${formatCompactTimestamp(data.modelTime)} | ` +
         `Updated ${formatCompactTimestamp(data.lastModified)} | ` +
         `Fetched ${formatDisplayTime(data.fetchedAt)} | Auto-refresh every 5 minutes`;
@@ -183,9 +324,11 @@
       `).join("");
     }
 
-    function renderChart(points) {
-      const labels = points.map((point) => formatDisplayTime(point.forecastTime));
-      const values = points.map((point) => point.temperatureC);
+    function renderChart(points, window) {
+      const chartData = points.map((point) => ({
+        x: parseForecastTime(point.forecastTime),
+        y: point.temperatureC,
+      }));
       const canvas = document.getElementById("temperatureChart");
 
       if (chart) {
@@ -195,10 +338,9 @@
       chart = new Chart(canvas, {
         type: "line",
         data: {
-          labels,
           datasets: [{
             label: "Temperature (°C)",
-            data: values,
+            data: chartData,
             borderColor: "#e74c3c",
             backgroundColor: "rgba(231, 76, 60, 0.12)",
             borderWidth: 2,
@@ -217,8 +359,15 @@
           },
           scales: {
             x: {
+              type: "time",
+              min: window.start.getTime(),
+              max: window.end.getTime(),
+              time: {
+                unit: "hour",
+                displayFormats: { hour: "MMM d HH:mm" },
+              },
               ticks: {
-                maxTicksLimit: 10,
+                maxTicksLimit: 12,
               },
             },
             y: {
@@ -248,22 +397,28 @@
         }
 
         const data = await response.json();
-        const points = data.temperaturePoints ?? [];
-        renderSummary(data);
+        const allPoints = data.temperaturePoints ?? [];
+        const window = getChartTimeWindow();
+        const visiblePoints = filterPointsByWindow(allPoints, window);
+        renderSummary(data, visiblePoints.length, window);
 
-        if (points.length === 0) {
+        if (allPoints.length === 0) {
           summary.textContent += " | No temperature points available yet.";
+          renderChart([], window);
           renderTable([]);
           return;
         }
 
-        renderChart(points);
-        renderTable(points);
+        renderChart(visiblePoints, window);
+        renderTable(visiblePoints);
       } catch (error) {
         summary.innerHTML = `<span class="error">Failed to load HKO forecast: ${error.message}</span>`;
       }
     }
 
+    loadConfig().then(() => {
+      document.getElementById("triggerRefreshBtn").addEventListener("click", triggerWorkflowRefresh);
+    });
     loadData();
     setInterval(loadData, REFRESH_MS);
   </script>

@@ -7,6 +7,8 @@ on:
     # UTC time. Stagger off the hour to reduce GitHub queue delays.
     - cron: '2,7,12,17,22,27,32,37,42,47,52,57 * * * *'
   workflow_dispatch:
+  repository_dispatch:
+    types: [refresh-hko]
 
 permissions:
   contents: read

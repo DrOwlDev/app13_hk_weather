@@ -35,6 +35,50 @@
       color: #52606d;
     }
 
+    .observed-table-wrap {
+      margin-bottom: 20px;
+    }
+
+    .observed-table-wrap h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .observed-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .observed-table-wrap th,
+    .observed-table-wrap td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #d9e2ec;
+    }
+
+    .observed-table-wrap th {
+      background: #0b6396;
+      color: #fff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .badge-locked-min {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .badge-locked-max {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     .panel {
       background: #fff;
       border-radius: 12px;
@@ -141,6 +185,25 @@
         color: #7dd3fc;
         border-color: #7dd3fc;
       }
+
+      .observed-table-wrap th {
+      .observed-table-wrap td {
+        border-bottom-color: #334155;
+      }
+
+      .observed-table-wrap th {
+        background: #1e3a5f;
+      }
+
+      .badge-locked-min {
+        background: #1e3a8a;
+        color: #bfdbfe;
+      }
+
+      .badge-locked-max {
+        background: #7f1d1d;
+        color: #fecaca;
+      }
     }
   </style>
 </head>
@@ -155,6 +218,23 @@
       <span id="refreshStatus"></span>
     </div>
     <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
+
+    <section id="observedPanel" class="panel observed-table-wrap" hidden>
+      <h2>Observed Since Midnight (Provisional)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value (°C)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="observedTableBody"></tbody>
+        </table>
+      </div>
+      <p id="observedMeta" class="meta"></p>
+    </section>
 
     <section class="panel">
       <div class="chart-wrap">
@@ -320,6 +400,89 @@
       });
     }
 
+    function formatObservationTime(value) {
+      if (value == null || String(value).length !== 12) {
+        return String(value ?? "unknown");
+      }
+      const text = String(value);
+      return formatDisplayTime(
+        `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}T${text.slice(8, 10)}:${text.slice(10, 12)}:00`,
+      );
+    }
+
+    function getRestOfTodayWindow(reference = new Date()) {
+      const start = new Date(reference);
+      const end = new Date(reference);
+      end.setHours(23, 59, 59, 999);
+      return { start, end };
+    }
+
+    function filterPointsFromNowToEndOfToday(points, reference = new Date()) {
+      const window = getRestOfTodayWindow(reference);
+      return points.filter((point) => {
+        const time = parseForecastTime(point.forecastTime);
+        return time >= window.start && time <= window.end;
+      });
+    }
+
+    function isLikelyLockedMin(observedMin, remainingPoints) {
+      if (remainingPoints.length === 0) {
+        return true;
+      }
+      return remainingPoints.every((point) => point.temperatureC >= observedMin);
+    }
+
+    function isLikelyLockedMax(observedMax, remainingPoints) {
+      if (remainingPoints.length === 0) {
+        return true;
+      }
+      return remainingPoints.every((point) => point.temperatureC <= observedMax);
+    }
+
+    function renderObservedTable(data) {
+      const panel = document.getElementById("observedPanel");
+      const tbody = document.getElementById("observedTableBody");
+      const meta = document.getElementById("observedMeta");
+      const obs = data.observedSinceMidnight;
+      if (
+        !obs ||
+        obs.maxTemperatureC == null ||
+        obs.minTemperatureC == null
+      ) {
+        panel.hidden = true;
+        tbody.innerHTML = "";
+        meta.textContent = "";
+        return;
+      }
+
+      const minTemp = Number(obs.minTemperatureC);
+      const maxTemp = Number(obs.maxTemperatureC);
+      const remainingToday = filterPointsFromNowToEndOfToday(
+        data.temperaturePoints ?? [],
+      );
+      const lockedMin = isLikelyLockedMin(minTemp, remainingToday);
+      const lockedMax = isLikelyLockedMax(maxTemp, remainingToday);
+      const station = obs.stationName || "HK Observatory";
+      const incomplete = obs.incompleteData ? " Partial 1-minute data." : "";
+
+      panel.hidden = false;
+      tbody.innerHTML = `
+        <tr>
+          <td>Min temperature since midnight</td>
+          <td>${minTemp.toFixed(1)}</td>
+          <td>${lockedMin ? '<span class="badge badge-locked-min">Likely Locked Min</span>' : "—"}</td>
+        </tr>
+        <tr>
+          <td>Max temperature since midnight</td>
+          <td>${maxTemp.toFixed(1)}</td>
+          <td>${lockedMax ? '<span class="badge badge-locked-max">Likely Locked Max</span>' : "—"}</td>
+        </tr>
+      `;
+      meta.textContent =
+        `${station} | Obs ${formatObservationTime(obs.observationTime)} | ` +
+        `${remainingToday.length} forecast hour(s) remaining today for lock check.${incomplete}`;
+    }
+
     function renderSummary(data, visibleCount, window) {
       const totalCount = data.temperaturePoints?.length ?? 0;
       document.getElementById("summary").textContent =
@@ -449,6 +612,7 @@
         const window = getChartTimeWindow();
         const visiblePoints = filterPointsByWindow(allPoints, window);
         renderSummary(data, visiblePoints.length, window);
+        renderObservedTable(data);
 
         if (allPoints.length === 0) {
           summary.textContent += " | No temperature points available yet.";
@@ -461,6 +625,7 @@
         renderTable(visiblePoints);
       } catch (error) {
         summary.innerHTML = `<span class="error">Failed to load HKO forecast: ${error.message}</span>`;
+        document.getElementById("observedPanel").hidden = true;
       }
     }
 

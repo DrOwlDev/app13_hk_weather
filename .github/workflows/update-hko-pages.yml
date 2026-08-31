@@ -30,7 +30,7 @@ jobs:
       - name: Fetch latest HKO data
         run: |
           python scripts/fetch_hko_ocf.py
-          python -c "import json; d=json.load(open('docs/data.json')); print('Deployed fetchedAt:', d['fetchedAt'])"
+          python -c "import json; d=json.load(open('docs/data.json')); print('Deployed fetchedAt:', d['fetchedAt']); obs=d.get('observedSinceMidnight'); print('Observed min/max:', obs.get('minTemperatureC') if obs else None, obs.get('maxTemperatureC') if obs else None)"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

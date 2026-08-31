@@ -53,30 +53,23 @@
     .observed-table-wrap td {
       padding: 10px 12px;
       text-align: left;
-      border-bottom: 1px solid #d9e2ec;
+      border: 1px solid #1f2933;
     }
 
-    .observed-table-wrap th {
-      background: #0b6396;
-      color: #fff;
+    .observed-table-wrap .date-header {
+      text-align: center;
+      font-weight: 700;
+      background: #f0f4f8;
     }
 
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.85rem;
+    .observed-table-wrap .status-locked {
+      background: #bbf7d0;
       font-weight: 600;
     }
 
-    .badge-locked-min {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .badge-locked-max {
-      background: #fee2e2;
-      color: #b91c1c;
+    .observed-table-wrap .status-not-locked {
+      background: #fef08a;
+      font-weight: 600;
     }
 
     .panel {
@@ -186,23 +179,23 @@
         border-color: #7dd3fc;
       }
 
-      .observed-table-wrap th {
+      .observed-table-wrap th,
       .observed-table-wrap td {
-        border-bottom-color: #334155;
+        border-color: #475569;
       }
 
-      .observed-table-wrap th {
-        background: #1e3a5f;
+      .observed-table-wrap .date-header {
+        background: #1f2937;
       }
 
-      .badge-locked-min {
-        background: #1e3a8a;
-        color: #bfdbfe;
+      .observed-table-wrap .status-locked {
+        background: #166534;
+        color: #dcfce7;
       }
 
-      .badge-locked-max {
-        background: #7f1d1d;
-        color: #fecaca;
+      .observed-table-wrap .status-not-locked {
+        background: #854d0e;
+        color: #fef9c3;
       }
     }
   </style>
@@ -220,16 +213,8 @@
     <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
 
     <section id="observedPanel" class="panel observed-table-wrap" hidden>
-      <h2 id="observedPanelTitle">Observed Since Midnight (Provisional)</h2>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Value (°C)</th>
-              <th>Status</th>
-            </tr>
-          </thead>
           <tbody id="observedTableBody"></tbody>
         </table>
       </div>
@@ -410,16 +395,39 @@
       );
     }
 
+    function formatDateKeyShort(dateKey) {
+      const [y, m, d] = dateKey.split("-").map(Number);
+      return `${d}/${m}/${y}`;
+    }
+
+    function formatTempC(value) {
+      return `${Math.round(Number(value))}°C`;
+    }
+
+    function getForecastExtremaForRestOfDay(minSinceMidnight, maxSinceMidnight, remainingPoints) {
+      if (remainingPoints.length === 0) {
+        return {
+          forecastedMin: minSinceMidnight,
+          forecastedMax: maxSinceMidnight,
+        };
+      }
+
+      const temps = remainingPoints.map((point) => point.temperatureC);
+      return {
+        forecastedMin: Math.min(minSinceMidnight, ...temps),
+        forecastedMax: Math.max(maxSinceMidnight, ...temps),
+      };
+    }
+
+    function isTempLocked(observed, forecasted) {
+      return Math.abs(observed - forecasted) < 0.05;
+    }
+
     function getDateKey(date) {
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, "0");
       const d = String(date.getDate()).padStart(2, "0");
       return `${y}-${m}-${d}`;
-    }
-
-    function formatDateKey(dateKey) {
-      const [y, m, d] = dateKey.split("-").map(Number);
-      return formatDisplayTime(new Date(y, m - 1, d, 0, 0, 0, 0));
     }
 
     function getChartReferenceDate(window, visiblePoints) {
@@ -489,23 +497,8 @@
       });
     }
 
-    function isLikelyLockedMin(observedMin, remainingPoints) {
-      if (remainingPoints.length === 0) {
-        return true;
-      }
-      return remainingPoints.every((point) => point.temperatureC >= observedMin);
-    }
-
-    function isLikelyLockedMax(observedMax, remainingPoints) {
-      if (remainingPoints.length === 0) {
-        return true;
-      }
-      return remainingPoints.every((point) => point.temperatureC <= observedMax);
-    }
-
     function renderObservedTable(data, window, visiblePoints) {
       const panel = document.getElementById("observedPanel");
-      const title = document.getElementById("observedPanelTitle");
       const tbody = document.getElementById("observedTableBody");
       const meta = document.getElementById("observedMeta");
       const allPoints = data.temperaturePoints ?? [];
@@ -523,13 +516,18 @@
         return;
       }
 
-      const minTemp = stats.minTemperatureC;
-      const maxTemp = stats.maxTemperatureC;
+      const minSinceMidnight = stats.minTemperatureC;
+      const maxSinceMidnight = stats.maxTemperatureC;
       const remainingOnChartDate = getRemainingPointsOnDate(allPoints, chartDate);
-      const lockedMin = isLikelyLockedMin(minTemp, remainingOnChartDate);
-      const lockedMax = isLikelyLockedMax(maxTemp, remainingOnChartDate);
+      const { forecastedMin, forecastedMax } = getForecastExtremaForRestOfDay(
+        minSinceMidnight,
+        maxSinceMidnight,
+        remainingOnChartDate,
+      );
+      const minLocked = isTempLocked(minSinceMidnight, forecastedMin);
+      const maxLocked = isTempLocked(maxSinceMidnight, forecastedMax);
       const station = data.observedSinceMidnight?.stationName || "HK Observatory";
-      const formattedDate = formatDateKey(chartDate);
+      const dateLabel = formatDateKeyShort(chartDate);
       const sourceLabel = stats.source === "observed"
         ? "HKO observed (provisional)"
         : "OCF hourly fallback";
@@ -539,22 +537,32 @@
       const incomplete = stats.incompleteData ? " Partial 1-minute data." : "";
 
       panel.hidden = false;
-      title.textContent = `Observed Since Midnight — ${formattedDate}`;
       tbody.innerHTML = `
         <tr>
-          <td>Min temperature since midnight (${formattedDate})</td>
-          <td>${minTemp.toFixed(1)}</td>
-          <td>${lockedMin ? '<span class="badge badge-locked-min">Likely Locked Min</span>' : "—"}</td>
+          <td class="date-header" colspan="4">Date (${dateLabel})</td>
         </tr>
         <tr>
-          <td>Max temperature since midnight (${formattedDate})</td>
-          <td>${maxTemp.toFixed(1)}</td>
-          <td>${lockedMax ? '<span class="badge badge-locked-max">Likely Locked Max</span>' : "—"}</td>
+          <td>Min Temp since midnight</td>
+          <td>${formatTempC(minSinceMidnight)}</td>
+          <td>Max Temp since midnight</td>
+          <td>${formatTempC(maxSinceMidnight)}</td>
+        </tr>
+        <tr>
+          <td>Forecasted Min Temp</td>
+          <td>${formatTempC(forecastedMin)}</td>
+          <td>Forecasted Max Temp</td>
+          <td>${formatTempC(forecastedMax)}</td>
+        </tr>
+        <tr>
+          <td>Min Temp Status</td>
+          <td class="${minLocked ? "status-locked" : "status-not-locked"}">${minLocked ? "Locked" : "Not Locked"}</td>
+          <td>Max Temp Status</td>
+          <td class="${maxLocked ? "status-locked" : "status-not-locked"}">${maxLocked ? "Locked" : "Not Locked"}</td>
         </tr>
       `;
       meta.textContent =
-        `Chart date ${formattedDate} | ${station} | ${sourceLabel}${obsTime} | ` +
-        `${remainingOnChartDate.length} forecast hour(s) remaining on chart date for lock check.${incomplete}`;
+        `${station} | ${sourceLabel}${obsTime} | ` +
+        `${remainingOnChartDate.length} forecast hour(s) from now to end of chart date.${incomplete}`;
     }
 
     function renderSummary(data, visibleCount, window) {

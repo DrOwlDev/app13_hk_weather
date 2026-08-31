@@ -220,7 +220,7 @@
     <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
 
     <section id="observedPanel" class="panel observed-table-wrap" hidden>
-      <h2>Observed Since Midnight (Provisional)</h2>
+      <h2 id="observedPanelTitle">Observed Since Midnight (Provisional)</h2>
       <div class="table-wrap">
         <table>
           <thead>
@@ -410,18 +410,82 @@
       );
     }
 
-    function getRestOfTodayWindow(reference = new Date()) {
-      const start = new Date(reference);
-      const end = new Date(reference);
-      end.setHours(23, 59, 59, 999);
-      return { start, end };
+    function getDateKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
     }
 
-    function filterPointsFromNowToEndOfToday(points, reference = new Date()) {
-      const window = getRestOfTodayWindow(reference);
+    function formatDateKey(dateKey) {
+      const [y, m, d] = dateKey.split("-").map(Number);
+      return formatDisplayTime(new Date(y, m - 1, d, 0, 0, 0, 0));
+    }
+
+    function getChartReferenceDate(window, visiblePoints) {
+      if (visiblePoints.length > 0) {
+        return getDateKey(parseForecastTime(visiblePoints[0].forecastTime));
+      }
+      return getDateKey(window.start);
+    }
+
+    function getObservationDateKey(obs) {
+      if (obs?.observationDate) {
+        return obs.observationDate;
+      }
+      const text = String(obs?.observationTime ?? "");
+      if (text.length < 8) {
+        return null;
+      }
+      return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+    }
+
+    function getPointsOnDate(points, dateKey) {
+      return points.filter(
+        (point) => getDateKey(parseForecastTime(point.forecastTime)) === dateKey,
+      );
+    }
+
+    function getSinceMidnightStatsForDate(points, dateKey, observed) {
+      const obsDateKey = getObservationDateKey(observed);
+      if (
+        observed &&
+        obsDateKey === dateKey &&
+        observed.minTemperatureC != null &&
+        observed.maxTemperatureC != null
+      ) {
+        return {
+          minTemperatureC: Number(observed.minTemperatureC),
+          maxTemperatureC: Number(observed.maxTemperatureC),
+          source: "observed",
+          observationTime: observed.observationTime,
+          incompleteData: observed.incompleteData,
+        };
+      }
+
+      const dayPoints = getPointsOnDate(points, dateKey);
+      if (dayPoints.length === 0) {
+        return null;
+      }
+      const temps = dayPoints.map((point) => point.temperatureC);
+      return {
+        minTemperatureC: Math.min(...temps),
+        maxTemperatureC: Math.max(...temps),
+        source: "forecast",
+        observationTime: null,
+        incompleteData: false,
+      };
+    }
+
+    function getRemainingPointsOnDate(points, dateKey, reference = new Date()) {
+      const [y, m, d] = dateKey.split("-").map(Number);
+      const dayStart = new Date(y, m - 1, d, 0, 0, 0, 0);
+      const dayEnd = new Date(y, m - 1, d, 23, 59, 59, 999);
+      const from = reference > dayStart ? reference : dayStart;
+
       return points.filter((point) => {
         const time = parseForecastTime(point.forecastTime);
-        return time >= window.start && time <= window.end;
+        return time >= from && time <= dayEnd;
       });
     }
 
@@ -439,48 +503,58 @@
       return remainingPoints.every((point) => point.temperatureC <= observedMax);
     }
 
-    function renderObservedTable(data) {
+    function renderObservedTable(data, window, visiblePoints) {
       const panel = document.getElementById("observedPanel");
+      const title = document.getElementById("observedPanelTitle");
       const tbody = document.getElementById("observedTableBody");
       const meta = document.getElementById("observedMeta");
-      const obs = data.observedSinceMidnight;
-      if (
-        !obs ||
-        obs.maxTemperatureC == null ||
-        obs.minTemperatureC == null
-      ) {
+      const allPoints = data.temperaturePoints ?? [];
+      const chartDate = getChartReferenceDate(window, visiblePoints);
+      const stats = getSinceMidnightStatsForDate(
+        allPoints,
+        chartDate,
+        data.observedSinceMidnight,
+      );
+
+      if (!stats) {
         panel.hidden = true;
         tbody.innerHTML = "";
         meta.textContent = "";
         return;
       }
 
-      const minTemp = Number(obs.minTemperatureC);
-      const maxTemp = Number(obs.maxTemperatureC);
-      const remainingToday = filterPointsFromNowToEndOfToday(
-        data.temperaturePoints ?? [],
-      );
-      const lockedMin = isLikelyLockedMin(minTemp, remainingToday);
-      const lockedMax = isLikelyLockedMax(maxTemp, remainingToday);
-      const station = obs.stationName || "HK Observatory";
-      const incomplete = obs.incompleteData ? " Partial 1-minute data." : "";
+      const minTemp = stats.minTemperatureC;
+      const maxTemp = stats.maxTemperatureC;
+      const remainingOnChartDate = getRemainingPointsOnDate(allPoints, chartDate);
+      const lockedMin = isLikelyLockedMin(minTemp, remainingOnChartDate);
+      const lockedMax = isLikelyLockedMax(maxTemp, remainingOnChartDate);
+      const station = data.observedSinceMidnight?.stationName || "HK Observatory";
+      const formattedDate = formatDateKey(chartDate);
+      const sourceLabel = stats.source === "observed"
+        ? "HKO observed (provisional)"
+        : "OCF hourly fallback";
+      const obsTime = stats.observationTime
+        ? ` | Obs ${formatObservationTime(stats.observationTime)}`
+        : "";
+      const incomplete = stats.incompleteData ? " Partial 1-minute data." : "";
 
       panel.hidden = false;
+      title.textContent = `Observed Since Midnight — ${formattedDate}`;
       tbody.innerHTML = `
         <tr>
-          <td>Min temperature since midnight</td>
+          <td>Min temperature since midnight (${formattedDate})</td>
           <td>${minTemp.toFixed(1)}</td>
           <td>${lockedMin ? '<span class="badge badge-locked-min">Likely Locked Min</span>' : "—"}</td>
         </tr>
         <tr>
-          <td>Max temperature since midnight</td>
+          <td>Max temperature since midnight (${formattedDate})</td>
           <td>${maxTemp.toFixed(1)}</td>
           <td>${lockedMax ? '<span class="badge badge-locked-max">Likely Locked Max</span>' : "—"}</td>
         </tr>
       `;
       meta.textContent =
-        `${station} | Obs ${formatObservationTime(obs.observationTime)} | ` +
-        `${remainingToday.length} forecast hour(s) remaining today for lock check.${incomplete}`;
+        `Chart date ${formattedDate} | ${station} | ${sourceLabel}${obsTime} | ` +
+        `${remainingOnChartDate.length} forecast hour(s) remaining on chart date for lock check.${incomplete}`;
     }
 
     function renderSummary(data, visibleCount, window) {
@@ -612,7 +686,7 @@
         const window = getChartTimeWindow();
         const visiblePoints = filterPointsByWindow(allPoints, window);
         renderSummary(data, visiblePoints.length, window);
-        renderObservedTable(data);
+        renderObservedTable(data, window, visiblePoints);
 
         if (allPoints.length === 0) {
           summary.textContent += " | No temperature points available yet.";

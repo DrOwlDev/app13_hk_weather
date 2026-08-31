@@ -1,6 +1,6 @@
 {
   "stationCode": "HKO",
-  "fetchedAt": "2026-09-01T00:15:43+08:00",
+  "fetchedAt": "2026-09-01T00:35:19+08:00",
   "lastModified": 20260901001148,
   "modelTime": 2026083100,
   "temperaturePoints": [
@@ -878,9 +878,10 @@
     }
   ],
   "observedSinceMidnight": {
-    "observationTime": "202609010000",
-    "maxTemperatureC": 29.5,
-    "minTemperatureC": 26.2,
+    "observationTime": "202609010020",
+    "observationDate": "2026-09-01",
+    "maxTemperatureC": 27.3,
+    "minTemperatureC": 27.1,
     "stationName": "HK Observatory",
     "provisional": true,
     "incompleteData": false

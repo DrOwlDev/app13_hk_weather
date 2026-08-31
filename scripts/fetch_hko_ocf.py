@@ -74,6 +74,7 @@ def fetch_observed_since_midnight() -> dict:
         min_temp, min_incomplete = parse_temperature(row[3])
         return {
             "observationTime": row[0],
+            "observationDate": f"{row[0][0:4]}-{row[0][4:6]}-{row[0][6:8]}",
             "maxTemperatureC": max_temp,
             "minTemperatureC": min_temp,
             "stationName": OBSERVED_STATION_NAME,

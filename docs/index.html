@@ -248,9 +248,12 @@
 
     function getChartTimeWindow(reference = new Date()) {
       const start = new Date(reference);
+      start.setHours(start.getHours() - 1);
+
       const end = new Date(reference);
-      end.setDate(end.getDate() + 1);
-      end.setHours(23, 59, 0, 0);
+      end.setDate(end.getDate() + 2);
+      end.setHours(1, 0, 0, 0);
+
       return { start, end };
     }
 

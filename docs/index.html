@@ -257,6 +257,20 @@
       return { start, end };
     }
 
+    function getMidnightTimestamps(window) {
+      const midnights = [];
+      const cursor = new Date(window.start);
+      cursor.setHours(0, 0, 0, 0);
+      if (cursor < window.start) {
+        cursor.setDate(cursor.getDate() + 1);
+      }
+      while (cursor <= window.end) {
+        midnights.push(cursor.getTime());
+        cursor.setDate(cursor.getDate() + 1);
+      }
+      return midnights;
+    }
+
     function filterPointsByWindow(points, window) {
       return points.filter((point) => {
         const time = parseForecastTime(point.forecastTime);
@@ -327,6 +341,32 @@
       `).join("");
     }
 
+    const midnightLinesPlugin = {
+      id: "midnightLines",
+      afterDraw(chart, _args, options) {
+        const { ctx, chartArea, scales } = chart;
+        const xScale = scales.x;
+        const midnights = options.midnights ?? [];
+        if (!chartArea || !xScale) return;
+
+        ctx.save();
+        ctx.strokeStyle = options.color ?? "blue";
+        ctx.lineWidth = options.lineWidth ?? 1;
+
+        for (const ts of midnights) {
+          const x = xScale.getPixelForValue(ts);
+          if (x >= chartArea.left && x <= chartArea.right) {
+            ctx.beginPath();
+            ctx.moveTo(x, chartArea.top);
+            ctx.lineTo(x, chartArea.bottom);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      },
+    };
+    Chart.register(midnightLinesPlugin);
+
     function renderChart(points, window) {
       const chartData = points.map((point) => ({
         x: parseForecastTime(point.forecastTime),
@@ -383,6 +423,11 @@
           plugins: {
             legend: {
               display: false,
+            },
+            midnightLines: {
+              midnights: getMidnightTimestamps(window),
+              color: "blue",
+              lineWidth: 1,
             },
           },
         },

@@ -1,8 +1,11 @@
 name: Update HKO Temperature Pages
 
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: '*/5 * * * *'
+    # UTC time. Stagger off the hour to reduce GitHub queue delays.
+    - cron: '2,7,12,17,22,27,32,37,42,47,52,57 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,7 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Fetch latest HKO data
-        run: python scripts/fetch_hko_ocf.py
+        run: |
+          python scripts/fetch_hko_ocf.py
+          python -c "import json; d=json.load(open('docs/data.json')); print('Deployed fetchedAt:', d['fetchedAt'])"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

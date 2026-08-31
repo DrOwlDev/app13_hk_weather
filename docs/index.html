@@ -240,7 +240,9 @@
     async function loadData() {
       const summary = document.getElementById("summary");
       try {
-        const response = await fetch(`./data.json?ts=${Date.now()}`);
+        const response = await fetch(`./data.json?ts=${Date.now()}`, {
+          cache: 'no-store',
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }

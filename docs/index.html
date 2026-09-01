@@ -246,15 +246,6 @@
       font-size: 0.95rem;
       color: #52606d;
     }
-
-    .portal-iframe-wrap iframe {
-      width: 100%;
-      height: 520px;
-      border: 0;
-      border-radius: 8px;
-      display: block;
-      background: #e4e7eb;
-    }
   </style>
 </head>
 <body>
@@ -266,8 +257,8 @@
         Auto Refresh
       </label>
       <button id="triggerRefreshBtn" type="button">Trigger data refresh</button>
-      <a id="actionsLink" class="button secondary" href="https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml" target="_blank" rel="noopener noreferrer">
-        Open GitHub Actions
+      <a id="hkoPortalLink" class="button secondary" href="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko" target="_blank" rel="noopener noreferrer">
+        Open on HKO
       </a>
       <span id="refreshStatus"></span>
     </div>
@@ -292,22 +283,6 @@
       <h2>HKO Webcam Photos</h2>
       <p class="meta">Latest photos from HKO Headquarters webcams (updated every 5 minutes).</p>
       <div id="webcamGrid" class="webcam-grid"></div>
-    </section>
-
-    <section class="panel">
-      <h2>HKO Regional Temperature Chart</h2>
-      <p class="meta">
-        Chart from the HKO AWS GIS portal.
-        <a href="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko" target="_blank" rel="noopener noreferrer">Open on HKO</a>
-      </p>
-      <div class="portal-iframe-wrap">
-        <iframe
-          title="HKO regional temperature chart"
-          src="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-      </div>
     </section>
 
     <section class="panel">
@@ -363,14 +338,9 @@
         // Fall back to defaults baked into the page.
       }
 
-      const actionsLink = document.getElementById("actionsLink");
-      if (siteConfig.actionsWorkflowUrl) {
-        actionsLink.href = siteConfig.actionsWorkflowUrl;
-      }
-
       const triggerBtn = document.getElementById("triggerRefreshBtn");
       if (!siteConfig.refreshProxyUrl) {
-        triggerBtn.title = "Configure refreshProxyUrl in config.json or use Open GitHub Actions";
+        triggerBtn.title = "Configure refreshProxyUrl in config.json to trigger refresh from the browser.";
       }
     }
 

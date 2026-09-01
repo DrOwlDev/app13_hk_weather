@@ -5,6 +5,8 @@
 - Chart x-axis should span from now minus 1 hour through 1:00 AM on today plus 2 days (local time).
 - Dashboard chart should show blue vertical lines at each local midnight (00:00) within the visible x-axis window.
 - Prefer official HKO observed CSV for since-midnight min/max when the chart date matches the CSV observation date.
+- Dashboard temperature display should truncate to one decimal place (Math.trunc), not round.
+- GitHub Pages dashboard Auto Refresh checkbox should default on with 1-minute loadData polling.
 - Wants manual kick-start URLs or options to trigger the GitHub Actions data refresh workflow.
 - Started with data-layer-only Flutter scope; chart visualization lives on GitHub Pages, not in the Flutter app.
 - Prefer parsing the HKO OCF JSON API endpoint over scraping the website chart.
@@ -17,7 +19,8 @@
 - GitHub Pages site in `docs/` uses Chart.js for a red-line temperature chart and reads `docs/data.json`.
 - `.github/workflows/update-hko-pages.yml` refreshes data on push, staggered ~5-minute cron, `workflow_dispatch`, and `repository_dispatch` (`refresh-hko`).
 - Manual refresh options are documented in README; optional Cloudflare Worker at `workers/hko-refresh-proxy/` enables a one-click browser URL.
-- Data fetch script `scripts/fetch_hko_ocf.py` fetches OCF forecast and HKO observed since-midnight min/max (`latest_since_midnight_maxmin.csv`) into `docs/data.json`.
-- Chart time window in `docs/index.html` uses `getChartTimeWindow()` (now − 1h → today + 2 days at 01:00) and `filterPointsByWindow()`.
-- Chart midnight lines use a custom `midnightLines` Chart.js plugin in `docs/index.html`.
+- Data fetch script `scripts/fetch_hko_ocf.py` fetches OCF forecast, HKO observed since-midnight min/max (`latest_since_midnight_maxmin.csv`), and webcam `Last-Modified` timestamps (east HKO + west HK2) into `docs/data.json` as `webcamPhotos`.
+- Chart time window in `docs/index.html` uses `getChartTimeWindow()` (now − 1h → today + 2 days at 01:00), `filterPointsByWindow()`, and a custom `midnightLines` Chart.js plugin.
 - Observed summary table derives chart date from the first visible forecast point; shows since-midnight min/max, forecasted min/max (vs remaining forecast hours on chart date), and Locked/Not Locked status.
+- Dashboard section order in `docs/index.html`: chart → HKO webcam photos → HKO regional portal iframe → temperature points table.
+- HKO regional portal iframe uses `https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko`; `X-Frame-Options: SAMEORIGIN` may block embed on github.io (Open on HKO link is fallback).

@@ -197,6 +197,38 @@
         background: #854d0e;
         color: #fef9c3;
       }
+
+      .webcam-card figcaption {
+        color: #94a3b8;
+      }
+    }
+
+    .webcam-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .webcam-card {
+      margin: 0;
+    }
+
+    .webcam-card a {
+      display: block;
+    }
+
+    .webcam-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      background: #e4e7eb;
+    }
+
+    .webcam-card figcaption {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #52606d;
     }
   </style>
 </head>
@@ -242,12 +274,32 @@
         </table>
       </div>
     </section>
+
+    <section id="webcamPanel" class="panel" hidden>
+      <h2>HKO Webcam Photos</h2>
+      <p class="meta">Latest photos from HKO Headquarters webcams (updated every 5 minutes).</p>
+      <div id="webcamGrid" class="webcam-grid"></div>
+    </section>
   </main>
 
   <script>
     const REFRESH_MS = 5 * 60 * 1000;
     const DEFAULT_ACTIONS_URL =
       "https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml";
+    const WEBCAM_PHOTOS = [
+      {
+        id: "HKO",
+        label: "HKO Headquarters — looking east",
+        imageUrl: "https://www.hko.gov.hk/wxinfo/aws/hko_mica/hko/latest_HD_HKO.jpg",
+        sourcePage: "https://www.hko.gov.hk/en/wxinfo/ts/webcam/HKO_photo.htm",
+      },
+      {
+        id: "HK2",
+        label: "HKO Headquarters — looking west",
+        imageUrl: "https://www.hko.gov.hk/wxinfo/aws/hko_mica/hk2/latest_HD_HK2.jpg",
+        sourcePage: "https://www.hko.gov.hk/en/wxinfo/ts/webcam/HK2_photo.htm",
+      },
+    ];
     let chart;
     let siteConfig = {
       actionsWorkflowUrl: DEFAULT_ACTIONS_URL,
@@ -401,7 +453,8 @@
     }
 
     function formatTempC(value) {
-      return `${Math.round(Number(value))}°C`;
+      const truncated = Math.trunc(Number(value) * 10) / 10;
+      return `${truncated.toFixed(1)}°C`;
     }
 
     function getForecastExtremaForRestOfDay(minSinceMidnight, maxSinceMidnight, remainingPoints) {
@@ -679,6 +732,38 @@
       });
     }
 
+    function renderWebcamPhotos(data) {
+      const panel = document.getElementById("webcamPanel");
+      const grid = document.getElementById("webcamGrid");
+      const photos =
+        data.webcamPhotos && data.webcamPhotos.length > 0
+          ? data.webcamPhotos
+          : WEBCAM_PHOTOS.map((photo) => ({ ...photo, takenAt: null }));
+
+      grid.innerHTML = photos
+        .map((photo) => {
+          const cacheBuster = photo.takenAt
+            ? encodeURIComponent(photo.takenAt)
+            : Date.now();
+          const timeLabel = photo.takenAt
+            ? formatDisplayTime(photo.takenAt)
+            : "Time unavailable";
+          return `
+            <figure class="webcam-card">
+              <a href="${photo.sourcePage}" target="_blank" rel="noopener noreferrer">
+                <img src="${photo.imageUrl}?v=${cacheBuster}" alt="${photo.label}" loading="lazy">
+              </a>
+              <figcaption>
+                <strong>${photo.label}</strong><br>
+                Taken at ${timeLabel}
+              </figcaption>
+            </figure>
+          `;
+        })
+        .join("");
+      panel.hidden = false;
+    }
+
     async function loadData() {
       const summary = document.getElementById("summary");
       try {
@@ -695,6 +780,7 @@
         const visiblePoints = filterPointsByWindow(allPoints, window);
         renderSummary(data, visiblePoints.length, window);
         renderObservedTable(data, window, visiblePoints);
+        renderWebcamPhotos(data);
 
         if (allPoints.length === 0) {
           summary.textContent += " | No temperature points available yet.";

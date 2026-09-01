@@ -1,228 +1,180 @@
 {
   "stationCode": "HKO",
-  "fetchedAt": "2026-09-01T02:03:29+08:00",
-  "lastModified": 20260901011156,
-  "modelTime": 2026083100,
+  "fetchedAt": "2026-09-01T23:19:32+08:00",
+  "lastModified": 20260901221158,
+  "modelTime": 2026083112,
   "temperaturePoints": [
     {
-      "forecastTime": "2026-08-31T23:00:00",
-      "temperatureC": 27.2
-    },
-    {
-      "forecastTime": "2026-09-01T00:00:00",
-      "temperatureC": 27.2
-    },
-    {
-      "forecastTime": "2026-09-01T01:00:00",
-      "temperatureC": 27.2
-    },
-    {
-      "forecastTime": "2026-09-01T02:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-01T03:00:00",
-      "temperatureC": 27.1
-    },
-    {
-      "forecastTime": "2026-09-01T04:00:00",
-      "temperatureC": 27.1
-    },
-    {
-      "forecastTime": "2026-09-01T05:00:00",
-      "temperatureC": 27.1
-    },
-    {
-      "forecastTime": "2026-09-01T06:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-01T07:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-01T08:00:00",
-      "temperatureC": 27.3
-    },
-    {
-      "forecastTime": "2026-09-01T09:00:00",
-      "temperatureC": 27.7
-    },
-    {
-      "forecastTime": "2026-09-01T10:00:00",
-      "temperatureC": 28.1
-    },
-    {
       "forecastTime": "2026-09-01T11:00:00",
-      "temperatureC": 28.5
+      "temperatureC": 27.5
     },
     {
       "forecastTime": "2026-09-01T12:00:00",
-      "temperatureC": 28.8
+      "temperatureC": 26.5
     },
     {
       "forecastTime": "2026-09-01T13:00:00",
-      "temperatureC": 29.3
-    },
-    {
-      "forecastTime": "2026-09-01T14:00:00",
-      "temperatureC": 30.0
-    },
-    {
-      "forecastTime": "2026-09-01T15:00:00",
-      "temperatureC": 29.8
-    },
-    {
-      "forecastTime": "2026-09-01T16:00:00",
-      "temperatureC": 29.2
-    },
-    {
-      "forecastTime": "2026-09-01T17:00:00",
-      "temperatureC": 29.1
-    },
-    {
-      "forecastTime": "2026-09-01T18:00:00",
-      "temperatureC": 28.3
-    },
-    {
-      "forecastTime": "2026-09-01T19:00:00",
-      "temperatureC": 28.2
-    },
-    {
-      "forecastTime": "2026-09-01T20:00:00",
-      "temperatureC": 28.0
-    },
-    {
-      "forecastTime": "2026-09-01T21:00:00",
-      "temperatureC": 27.9
-    },
-    {
-      "forecastTime": "2026-09-01T22:00:00",
-      "temperatureC": 27.9
-    },
-    {
-      "forecastTime": "2026-09-01T23:00:00",
-      "temperatureC": 27.9
-    },
-    {
-      "forecastTime": "2026-09-02T00:00:00",
-      "temperatureC": 27.8
-    },
-    {
-      "forecastTime": "2026-09-02T01:00:00",
-      "temperatureC": 27.7
-    },
-    {
-      "forecastTime": "2026-09-02T02:00:00",
-      "temperatureC": 27.4
-    },
-    {
-      "forecastTime": "2026-09-02T03:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-02T04:00:00",
       "temperatureC": 26.7
     },
     {
-      "forecastTime": "2026-09-02T05:00:00",
-      "temperatureC": 26.2
+      "forecastTime": "2026-09-01T14:00:00",
+      "temperatureC": 27.3
     },
     {
-      "forecastTime": "2026-09-02T06:00:00",
-      "temperatureC": 26.0
-    },
-    {
-      "forecastTime": "2026-09-02T07:00:00",
-      "temperatureC": 26.2
-    },
-    {
-      "forecastTime": "2026-09-02T08:00:00",
-      "temperatureC": 26.6
-    },
-    {
-      "forecastTime": "2026-09-02T09:00:00",
-      "temperatureC": 27.5
-    },
-    {
-      "forecastTime": "2026-09-02T10:00:00",
-      "temperatureC": 28.2
-    },
-    {
-      "forecastTime": "2026-09-02T11:00:00",
-      "temperatureC": 29.3
-    },
-    {
-      "forecastTime": "2026-09-02T12:00:00",
-      "temperatureC": 29.6
-    },
-    {
-      "forecastTime": "2026-09-02T13:00:00",
-      "temperatureC": 30.4
-    },
-    {
-      "forecastTime": "2026-09-02T14:00:00",
-      "temperatureC": 31.0
-    },
-    {
-      "forecastTime": "2026-09-02T15:00:00",
-      "temperatureC": 30.8
-    },
-    {
-      "forecastTime": "2026-09-02T16:00:00",
-      "temperatureC": 30.5
-    },
-    {
-      "forecastTime": "2026-09-02T17:00:00",
-      "temperatureC": 30.1
-    },
-    {
-      "forecastTime": "2026-09-02T18:00:00",
-      "temperatureC": 29.6
-    },
-    {
-      "forecastTime": "2026-09-02T19:00:00",
-      "temperatureC": 29.1
-    },
-    {
-      "forecastTime": "2026-09-02T20:00:00",
-      "temperatureC": 28.5
-    },
-    {
-      "forecastTime": "2026-09-02T21:00:00",
-      "temperatureC": 28.3
-    },
-    {
-      "forecastTime": "2026-09-02T22:00:00",
-      "temperatureC": 28.2
-    },
-    {
-      "forecastTime": "2026-09-02T23:00:00",
-      "temperatureC": 28.0
-    },
-    {
-      "forecastTime": "2026-09-03T00:00:00",
+      "forecastTime": "2026-09-01T15:00:00",
       "temperatureC": 27.7
     },
     {
-      "forecastTime": "2026-09-03T01:00:00",
-      "temperatureC": 27.5
+      "forecastTime": "2026-09-01T16:00:00",
+      "temperatureC": 28.1
     },
     {
-      "forecastTime": "2026-09-03T02:00:00",
+      "forecastTime": "2026-09-01T17:00:00",
+      "temperatureC": 28.2
+    },
+    {
+      "forecastTime": "2026-09-01T18:00:00",
+      "temperatureC": 28.6
+    },
+    {
+      "forecastTime": "2026-09-01T19:00:00",
       "temperatureC": 27.2
     },
     {
-      "forecastTime": "2026-09-03T03:00:00",
-      "temperatureC": 27.0
+      "forecastTime": "2026-09-01T20:00:00",
+      "temperatureC": 27.1
     },
     {
-      "forecastTime": "2026-09-03T04:00:00",
+      "forecastTime": "2026-09-01T21:00:00",
+      "temperatureC": 27.3
+    },
+    {
+      "forecastTime": "2026-09-01T22:00:00",
       "temperatureC": 26.4
     },
     {
+      "forecastTime": "2026-09-01T23:00:00",
+      "temperatureC": 26.4
+    },
+    {
+      "forecastTime": "2026-09-02T00:00:00",
+      "temperatureC": 26.5
+    },
+    {
+      "forecastTime": "2026-09-02T01:00:00",
+      "temperatureC": 26.6
+    },
+    {
+      "forecastTime": "2026-09-02T02:00:00",
+      "temperatureC": 26.7
+    },
+    {
+      "forecastTime": "2026-09-02T03:00:00",
+      "temperatureC": 26.7
+    },
+    {
+      "forecastTime": "2026-09-02T04:00:00",
+      "temperatureC": 26.9
+    },
+    {
+      "forecastTime": "2026-09-02T05:00:00",
+      "temperatureC": 27.0
+    },
+    {
+      "forecastTime": "2026-09-02T06:00:00",
+      "temperatureC": 27.0
+    },
+    {
+      "forecastTime": "2026-09-02T07:00:00",
+      "temperatureC": 27.1
+    },
+    {
+      "forecastTime": "2026-09-02T08:00:00",
+      "temperatureC": 27.4
+    },
+    {
+      "forecastTime": "2026-09-02T09:00:00",
+      "temperatureC": 28.1
+    },
+    {
+      "forecastTime": "2026-09-02T10:00:00",
+      "temperatureC": 28.8
+    },
+    {
+      "forecastTime": "2026-09-02T11:00:00",
+      "temperatureC": 29.5
+    },
+    {
+      "forecastTime": "2026-09-02T12:00:00",
+      "temperatureC": 29.5
+    },
+    {
+      "forecastTime": "2026-09-02T13:00:00",
+      "temperatureC": 30.0
+    },
+    {
+      "forecastTime": "2026-09-02T14:00:00",
+      "temperatureC": 29.6
+    },
+    {
+      "forecastTime": "2026-09-02T15:00:00",
+      "temperatureC": 29.3
+    },
+    {
+      "forecastTime": "2026-09-02T16:00:00",
+      "temperatureC": 29.0
+    },
+    {
+      "forecastTime": "2026-09-02T17:00:00",
+      "temperatureC": 28.4
+    },
+    {
+      "forecastTime": "2026-09-02T18:00:00",
+      "temperatureC": 27.9
+    },
+    {
+      "forecastTime": "2026-09-02T19:00:00",
+      "temperatureC": 27.5
+    },
+    {
+      "forecastTime": "2026-09-02T20:00:00",
+      "temperatureC": 26.9
+    },
+    {
+      "forecastTime": "2026-09-02T21:00:00",
+      "temperatureC": 26.6
+    },
+    {
+      "forecastTime": "2026-09-02T22:00:00",
+      "temperatureC": 26.3
+    },
+    {
+      "forecastTime": "2026-09-02T23:00:00",
+      "temperatureC": 26.0
+    },
+    {
+      "forecastTime": "2026-09-03T00:00:00",
+      "temperatureC": 25.9
+    },
+    {
+      "forecastTime": "2026-09-03T01:00:00",
+      "temperatureC": 26.1
+    },
+    {
+      "forecastTime": "2026-09-03T02:00:00",
+      "temperatureC": 26.3
+    },
+    {
+      "forecastTime": "2026-09-03T03:00:00",
+      "temperatureC": 26.1
+    },
+    {
+      "forecastTime": "2026-09-03T04:00:00",
+      "temperatureC": 25.6
+    },
+    {
       "forecastTime": "2026-09-03T05:00:00",
-      "temperatureC": 25.7
+      "temperatureC": 25.2
     },
     {
       "forecastTime": "2026-09-03T06:00:00",
@@ -230,23 +182,23 @@
     },
     {
       "forecastTime": "2026-09-03T07:00:00",
-      "temperatureC": 25.0
+      "temperatureC": 25.3
     },
     {
       "forecastTime": "2026-09-03T08:00:00",
-      "temperatureC": 25.5
+      "temperatureC": 25.9
     },
     {
       "forecastTime": "2026-09-03T09:00:00",
-      "temperatureC": 26.3
+      "temperatureC": 26.6
     },
     {
       "forecastTime": "2026-09-03T10:00:00",
-      "temperatureC": 27.1
+      "temperatureC": 27.4
     },
     {
       "forecastTime": "2026-09-03T11:00:00",
-      "temperatureC": 28.1
+      "temperatureC": 28.3
     },
     {
       "forecastTime": "2026-09-03T12:00:00",
@@ -262,119 +214,119 @@
     },
     {
       "forecastTime": "2026-09-03T15:00:00",
-      "temperatureC": 29.9
+      "temperatureC": 29.8
     },
     {
       "forecastTime": "2026-09-03T16:00:00",
-      "temperatureC": 29.5
+      "temperatureC": 29.4
     },
     {
       "forecastTime": "2026-09-03T17:00:00",
-      "temperatureC": 29.3
+      "temperatureC": 28.6
     },
     {
       "forecastTime": "2026-09-03T18:00:00",
-      "temperatureC": 28.9
-    },
-    {
-      "forecastTime": "2026-09-03T19:00:00",
-      "temperatureC": 28.5
-    },
-    {
-      "forecastTime": "2026-09-03T20:00:00",
       "temperatureC": 27.9
     },
     {
-      "forecastTime": "2026-09-03T21:00:00",
+      "forecastTime": "2026-09-03T19:00:00",
       "temperatureC": 27.7
     },
     {
+      "forecastTime": "2026-09-03T20:00:00",
+      "temperatureC": 27.4
+    },
+    {
+      "forecastTime": "2026-09-03T21:00:00",
+      "temperatureC": 27.4
+    },
+    {
       "forecastTime": "2026-09-03T22:00:00",
-      "temperatureC": 27.6
-    },
-    {
-      "forecastTime": "2026-09-03T23:00:00",
-      "temperatureC": 27.5
-    },
-    {
-      "forecastTime": "2026-09-04T00:00:00",
       "temperatureC": 27.3
     },
     {
-      "forecastTime": "2026-09-04T01:00:00",
+      "forecastTime": "2026-09-03T23:00:00",
       "temperatureC": 27.2
     },
     {
-      "forecastTime": "2026-09-04T02:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-04T03:00:00",
+      "forecastTime": "2026-09-04T00:00:00",
       "temperatureC": 26.9
     },
     {
+      "forecastTime": "2026-09-04T01:00:00",
+      "temperatureC": 26.3
+    },
+    {
+      "forecastTime": "2026-09-04T02:00:00",
+      "temperatureC": 25.6
+    },
+    {
+      "forecastTime": "2026-09-04T03:00:00",
+      "temperatureC": 25.1
+    },
+    {
       "forecastTime": "2026-09-04T04:00:00",
-      "temperatureC": 26.7
+      "temperatureC": 25.0
     },
     {
       "forecastTime": "2026-09-04T05:00:00",
-      "temperatureC": 26.5
+      "temperatureC": 25.1
     },
     {
       "forecastTime": "2026-09-04T06:00:00",
-      "temperatureC": 26.2
+      "temperatureC": 25.1
     },
     {
       "forecastTime": "2026-09-04T07:00:00",
-      "temperatureC": 26.1
+      "temperatureC": 25.3
     },
     {
       "forecastTime": "2026-09-04T08:00:00",
-      "temperatureC": 26.5
+      "temperatureC": 25.7
     },
     {
       "forecastTime": "2026-09-04T09:00:00",
-      "temperatureC": 27.1
+      "temperatureC": 26.3
     },
     {
       "forecastTime": "2026-09-04T10:00:00",
-      "temperatureC": 27.8
+      "temperatureC": 26.7
     },
     {
       "forecastTime": "2026-09-04T11:00:00",
-      "temperatureC": 28.5
+      "temperatureC": 27.4
     },
     {
       "forecastTime": "2026-09-04T12:00:00",
-      "temperatureC": 28.9
+      "temperatureC": 27.8
     },
     {
       "forecastTime": "2026-09-04T13:00:00",
-      "temperatureC": 29.5
+      "temperatureC": 28.6
     },
     {
       "forecastTime": "2026-09-04T14:00:00",
-      "temperatureC": 30.0
+      "temperatureC": 29.0
     },
     {
       "forecastTime": "2026-09-04T15:00:00",
-      "temperatureC": 29.9
+      "temperatureC": 29.0
     },
     {
       "forecastTime": "2026-09-04T16:00:00",
-      "temperatureC": 29.2
+      "temperatureC": 28.9
     },
     {
       "forecastTime": "2026-09-04T17:00:00",
-      "temperatureC": 28.8
+      "temperatureC": 28.9
     },
     {
       "forecastTime": "2026-09-04T18:00:00",
-      "temperatureC": 28.4
+      "temperatureC": 29.0
     },
     {
       "forecastTime": "2026-09-04T19:00:00",
-      "temperatureC": 28.4
+      "temperatureC": 28.7
     },
     {
       "forecastTime": "2026-09-04T20:00:00",
@@ -382,35 +334,35 @@
     },
     {
       "forecastTime": "2026-09-04T21:00:00",
-      "temperatureC": 28.1
+      "temperatureC": 28.3
     },
     {
       "forecastTime": "2026-09-04T22:00:00",
-      "temperatureC": 28.1
+      "temperatureC": 28.2
     },
     {
       "forecastTime": "2026-09-04T23:00:00",
-      "temperatureC": 28.0
-    },
-    {
-      "forecastTime": "2026-09-05T00:00:00",
       "temperatureC": 27.7
     },
     {
-      "forecastTime": "2026-09-05T01:00:00",
-      "temperatureC": 27.4
-    },
-    {
-      "forecastTime": "2026-09-05T02:00:00",
+      "forecastTime": "2026-09-05T00:00:00",
       "temperatureC": 27.1
     },
     {
+      "forecastTime": "2026-09-05T01:00:00",
+      "temperatureC": 26.5
+    },
+    {
+      "forecastTime": "2026-09-05T02:00:00",
+      "temperatureC": 26.2
+    },
+    {
       "forecastTime": "2026-09-05T03:00:00",
-      "temperatureC": 27.0
+      "temperatureC": 26.3
     },
     {
       "forecastTime": "2026-09-05T04:00:00",
-      "temperatureC": 26.7
+      "temperatureC": 26.5
     },
     {
       "forecastTime": "2026-09-05T05:00:00",
@@ -418,199 +370,199 @@
     },
     {
       "forecastTime": "2026-09-05T06:00:00",
-      "temperatureC": 26.1
+      "temperatureC": 26.4
     },
     {
       "forecastTime": "2026-09-05T07:00:00",
-      "temperatureC": 26.0
+      "temperatureC": 26.4
     },
     {
       "forecastTime": "2026-09-05T08:00:00",
-      "temperatureC": 26.3
-    },
-    {
-      "forecastTime": "2026-09-05T09:00:00",
-      "temperatureC": 27.1
-    },
-    {
-      "forecastTime": "2026-09-05T10:00:00",
-      "temperatureC": 27.9
-    },
-    {
-      "forecastTime": "2026-09-05T11:00:00",
-      "temperatureC": 28.6
-    },
-    {
-      "forecastTime": "2026-09-05T12:00:00",
-      "temperatureC": 29.0
-    },
-    {
-      "forecastTime": "2026-09-05T13:00:00",
-      "temperatureC": 29.6
-    },
-    {
-      "forecastTime": "2026-09-05T14:00:00",
-      "temperatureC": 30.1
-    },
-    {
-      "forecastTime": "2026-09-05T15:00:00",
-      "temperatureC": 30.0
-    },
-    {
-      "forecastTime": "2026-09-05T16:00:00",
-      "temperatureC": 29.4
-    },
-    {
-      "forecastTime": "2026-09-05T17:00:00",
-      "temperatureC": 29.0
-    },
-    {
-      "forecastTime": "2026-09-05T18:00:00",
-      "temperatureC": 28.4
-    },
-    {
-      "forecastTime": "2026-09-05T19:00:00",
-      "temperatureC": 28.3
-    },
-    {
-      "forecastTime": "2026-09-05T20:00:00",
-      "temperatureC": 28.0
-    },
-    {
-      "forecastTime": "2026-09-05T21:00:00",
-      "temperatureC": 27.9
-    },
-    {
-      "forecastTime": "2026-09-05T22:00:00",
-      "temperatureC": 27.8
-    },
-    {
-      "forecastTime": "2026-09-05T23:00:00",
-      "temperatureC": 27.7
-    },
-    {
-      "forecastTime": "2026-09-06T00:00:00",
-      "temperatureC": 27.7
-    },
-    {
-      "forecastTime": "2026-09-06T01:00:00",
-      "temperatureC": 27.6
-    },
-    {
-      "forecastTime": "2026-09-06T02:00:00",
-      "temperatureC": 27.5
-    },
-    {
-      "forecastTime": "2026-09-06T03:00:00",
-      "temperatureC": 27.2
-    },
-    {
-      "forecastTime": "2026-09-06T04:00:00",
-      "temperatureC": 27.0
-    },
-    {
-      "forecastTime": "2026-09-06T05:00:00",
-      "temperatureC": 26.8
-    },
-    {
-      "forecastTime": "2026-09-06T06:00:00",
       "temperatureC": 26.6
     },
     {
-      "forecastTime": "2026-09-06T07:00:00",
-      "temperatureC": 26.8
+      "forecastTime": "2026-09-05T09:00:00",
+      "temperatureC": 27.3
     },
     {
-      "forecastTime": "2026-09-06T08:00:00",
-      "temperatureC": 27.2
+      "forecastTime": "2026-09-05T10:00:00",
+      "temperatureC": 28.1
     },
     {
-      "forecastTime": "2026-09-06T09:00:00",
-      "temperatureC": 27.9
+      "forecastTime": "2026-09-05T11:00:00",
+      "temperatureC": 29.1
     },
     {
-      "forecastTime": "2026-09-06T10:00:00",
-      "temperatureC": 28.5
-    },
-    {
-      "forecastTime": "2026-09-06T11:00:00",
-      "temperatureC": 29.2
-    },
-    {
-      "forecastTime": "2026-09-06T12:00:00",
-      "temperatureC": 29.6
-    },
-    {
-      "forecastTime": "2026-09-06T13:00:00",
-      "temperatureC": 30.3
-    },
-    {
-      "forecastTime": "2026-09-06T14:00:00",
-      "temperatureC": 30.8
-    },
-    {
-      "forecastTime": "2026-09-06T15:00:00",
-      "temperatureC": 30.8
-    },
-    {
-      "forecastTime": "2026-09-06T16:00:00",
-      "temperatureC": 30.3
-    },
-    {
-      "forecastTime": "2026-09-06T17:00:00",
-      "temperatureC": 29.9
-    },
-    {
-      "forecastTime": "2026-09-06T18:00:00",
+      "forecastTime": "2026-09-05T12:00:00",
       "temperatureC": 29.5
     },
     {
-      "forecastTime": "2026-09-06T19:00:00",
+      "forecastTime": "2026-09-05T13:00:00",
+      "temperatureC": 30.2
+    },
+    {
+      "forecastTime": "2026-09-05T14:00:00",
+      "temperatureC": 30.7
+    },
+    {
+      "forecastTime": "2026-09-05T15:00:00",
+      "temperatureC": 31.0
+    },
+    {
+      "forecastTime": "2026-09-05T16:00:00",
+      "temperatureC": 30.8
+    },
+    {
+      "forecastTime": "2026-09-05T17:00:00",
+      "temperatureC": 30.9
+    },
+    {
+      "forecastTime": "2026-09-05T18:00:00",
+      "temperatureC": 30.4
+    },
+    {
+      "forecastTime": "2026-09-05T19:00:00",
+      "temperatureC": 30.1
+    },
+    {
+      "forecastTime": "2026-09-05T20:00:00",
+      "temperatureC": 29.5
+    },
+    {
+      "forecastTime": "2026-09-05T21:00:00",
+      "temperatureC": 29.4
+    },
+    {
+      "forecastTime": "2026-09-05T22:00:00",
       "temperatureC": 29.2
     },
     {
-      "forecastTime": "2026-09-06T20:00:00",
-      "temperatureC": 28.9
+      "forecastTime": "2026-09-05T23:00:00",
+      "temperatureC": 29.0
     },
     {
-      "forecastTime": "2026-09-06T21:00:00",
+      "forecastTime": "2026-09-06T00:00:00",
       "temperatureC": 28.8
     },
     {
-      "forecastTime": "2026-09-06T22:00:00",
-      "temperatureC": 28.7
+      "forecastTime": "2026-09-06T01:00:00",
+      "temperatureC": 28.5
     },
     {
-      "forecastTime": "2026-09-06T23:00:00",
-      "temperatureC": 28.6
-    },
-    {
-      "forecastTime": "2026-09-07T00:00:00",
-      "temperatureC": 28.4
-    },
-    {
-      "forecastTime": "2026-09-07T01:00:00",
+      "forecastTime": "2026-09-06T02:00:00",
       "temperatureC": 28.2
     },
     {
-      "forecastTime": "2026-09-07T02:00:00",
-      "temperatureC": 27.9
+      "forecastTime": "2026-09-06T03:00:00",
+      "temperatureC": 27.8
     },
     {
-      "forecastTime": "2026-09-07T03:00:00",
-      "temperatureC": 27.6
+      "forecastTime": "2026-09-06T04:00:00",
+      "temperatureC": 27.5
     },
     {
-      "forecastTime": "2026-09-07T04:00:00",
-      "temperatureC": 27.4
-    },
-    {
-      "forecastTime": "2026-09-07T05:00:00",
+      "forecastTime": "2026-09-06T05:00:00",
       "temperatureC": 27.1
     },
     {
+      "forecastTime": "2026-09-06T06:00:00",
+      "temperatureC": 26.9
+    },
+    {
+      "forecastTime": "2026-09-06T07:00:00",
+      "temperatureC": 27.2
+    },
+    {
+      "forecastTime": "2026-09-06T08:00:00",
+      "temperatureC": 27.5
+    },
+    {
+      "forecastTime": "2026-09-06T09:00:00",
+      "temperatureC": 28.4
+    },
+    {
+      "forecastTime": "2026-09-06T10:00:00",
+      "temperatureC": 29.4
+    },
+    {
+      "forecastTime": "2026-09-06T11:00:00",
+      "temperatureC": 30.3
+    },
+    {
+      "forecastTime": "2026-09-06T12:00:00",
+      "temperatureC": 30.6
+    },
+    {
+      "forecastTime": "2026-09-06T13:00:00",
+      "temperatureC": 31.3
+    },
+    {
+      "forecastTime": "2026-09-06T14:00:00",
+      "temperatureC": 31.8
+    },
+    {
+      "forecastTime": "2026-09-06T15:00:00",
+      "temperatureC": 32.2
+    },
+    {
+      "forecastTime": "2026-09-06T16:00:00",
+      "temperatureC": 32.0
+    },
+    {
+      "forecastTime": "2026-09-06T17:00:00",
+      "temperatureC": 31.6
+    },
+    {
+      "forecastTime": "2026-09-06T18:00:00",
+      "temperatureC": 30.7
+    },
+    {
+      "forecastTime": "2026-09-06T19:00:00",
+      "temperatureC": 29.8
+    },
+    {
+      "forecastTime": "2026-09-06T20:00:00",
+      "temperatureC": 29.1
+    },
+    {
+      "forecastTime": "2026-09-06T21:00:00",
+      "temperatureC": 29.1
+    },
+    {
+      "forecastTime": "2026-09-06T22:00:00",
+      "temperatureC": 29.0
+    },
+    {
+      "forecastTime": "2026-09-06T23:00:00",
+      "temperatureC": 28.8
+    },
+    {
+      "forecastTime": "2026-09-07T00:00:00",
+      "temperatureC": 28.6
+    },
+    {
+      "forecastTime": "2026-09-07T01:00:00",
+      "temperatureC": 28.3
+    },
+    {
+      "forecastTime": "2026-09-07T02:00:00",
+      "temperatureC": 28.0
+    },
+    {
+      "forecastTime": "2026-09-07T03:00:00",
+      "temperatureC": 27.7
+    },
+    {
+      "forecastTime": "2026-09-07T04:00:00",
+      "temperatureC": 27.5
+    },
+    {
+      "forecastTime": "2026-09-07T05:00:00",
+      "temperatureC": 27.2
+    },
+    {
       "forecastTime": "2026-09-07T06:00:00",
-      "temperatureC": 27.0
+      "temperatureC": 27.1
     },
     {
       "forecastTime": "2026-09-07T07:00:00",
@@ -618,47 +570,47 @@
     },
     {
       "forecastTime": "2026-09-07T08:00:00",
-      "temperatureC": 27.7
+      "temperatureC": 27.8
     },
     {
       "forecastTime": "2026-09-07T09:00:00",
-      "temperatureC": 28.5
+      "temperatureC": 28.6
     },
     {
       "forecastTime": "2026-09-07T10:00:00",
-      "temperatureC": 29.1
+      "temperatureC": 29.4
     },
     {
       "forecastTime": "2026-09-07T11:00:00",
-      "temperatureC": 29.8
-    },
-    {
-      "forecastTime": "2026-09-07T12:00:00",
       "temperatureC": 30.2
     },
     {
+      "forecastTime": "2026-09-07T12:00:00",
+      "temperatureC": 30.6
+    },
+    {
       "forecastTime": "2026-09-07T13:00:00",
-      "temperatureC": 30.9
+      "temperatureC": 31.3
     },
     {
       "forecastTime": "2026-09-07T14:00:00",
-      "temperatureC": 31.3
+      "temperatureC": 31.8
     },
     {
       "forecastTime": "2026-09-07T15:00:00",
-      "temperatureC": 31.3
+      "temperatureC": 32.0
     },
     {
       "forecastTime": "2026-09-07T16:00:00",
-      "temperatureC": 30.7
+      "temperatureC": 31.6
     },
     {
       "forecastTime": "2026-09-07T17:00:00",
-      "temperatureC": 30.4
+      "temperatureC": 31.1
     },
     {
       "forecastTime": "2026-09-07T18:00:00",
-      "temperatureC": 29.9
+      "temperatureC": 30.3
     },
     {
       "forecastTime": "2026-09-07T19:00:00",
@@ -666,67 +618,67 @@
     },
     {
       "forecastTime": "2026-09-07T20:00:00",
-      "temperatureC": 29.1
-    },
-    {
-      "forecastTime": "2026-09-07T21:00:00",
       "temperatureC": 29.0
     },
     {
-      "forecastTime": "2026-09-07T22:00:00",
+      "forecastTime": "2026-09-07T21:00:00",
       "temperatureC": 28.9
     },
     {
-      "forecastTime": "2026-09-07T23:00:00",
+      "forecastTime": "2026-09-07T22:00:00",
       "temperatureC": 28.8
     },
     {
-      "forecastTime": "2026-09-08T00:00:00",
+      "forecastTime": "2026-09-07T23:00:00",
       "temperatureC": 28.7
     },
     {
-      "forecastTime": "2026-09-08T01:00:00",
+      "forecastTime": "2026-09-08T00:00:00",
       "temperatureC": 28.5
     },
     {
+      "forecastTime": "2026-09-08T01:00:00",
+      "temperatureC": 28.2
+    },
+    {
       "forecastTime": "2026-09-08T02:00:00",
-      "temperatureC": 28.3
-    },
-    {
-      "forecastTime": "2026-09-08T03:00:00",
-      "temperatureC": 28.0
-    },
-    {
-      "forecastTime": "2026-09-08T04:00:00",
-      "temperatureC": 27.8
-    },
-    {
-      "forecastTime": "2026-09-08T05:00:00",
-      "temperatureC": 27.5
-    },
-    {
-      "forecastTime": "2026-09-08T06:00:00",
-      "temperatureC": 27.4
-    },
-    {
-      "forecastTime": "2026-09-08T07:00:00",
-      "temperatureC": 27.5
-    },
-    {
-      "forecastTime": "2026-09-08T08:00:00",
       "temperatureC": 27.9
     },
     {
+      "forecastTime": "2026-09-08T03:00:00",
+      "temperatureC": 27.5
+    },
+    {
+      "forecastTime": "2026-09-08T04:00:00",
+      "temperatureC": 27.3
+    },
+    {
+      "forecastTime": "2026-09-08T05:00:00",
+      "temperatureC": 26.9
+    },
+    {
+      "forecastTime": "2026-09-08T06:00:00",
+      "temperatureC": 26.8
+    },
+    {
+      "forecastTime": "2026-09-08T07:00:00",
+      "temperatureC": 27.1
+    },
+    {
+      "forecastTime": "2026-09-08T08:00:00",
+      "temperatureC": 27.6
+    },
+    {
       "forecastTime": "2026-09-08T09:00:00",
-      "temperatureC": 28.7
+      "temperatureC": 28.4
     },
     {
       "forecastTime": "2026-09-08T10:00:00",
-      "temperatureC": 29.3
+      "temperatureC": 29.2
     },
     {
       "forecastTime": "2026-09-08T11:00:00",
-      "temperatureC": 29.9
+      "temperatureC": 30.0
     },
     {
       "forecastTime": "2026-09-08T12:00:00",
@@ -738,7 +690,7 @@
     },
     {
       "forecastTime": "2026-09-08T14:00:00",
-      "temperatureC": 31.5
+      "temperatureC": 31.6
     },
     {
       "forecastTime": "2026-09-08T15:00:00",
@@ -746,51 +698,51 @@
     },
     {
       "forecastTime": "2026-09-08T16:00:00",
-      "temperatureC": 30.9
+      "temperatureC": 30.8
     },
     {
       "forecastTime": "2026-09-08T17:00:00",
-      "temperatureC": 30.6
+      "temperatureC": 30.4
     },
     {
       "forecastTime": "2026-09-08T18:00:00",
-      "temperatureC": 30.1
+      "temperatureC": 29.6
     },
     {
       "forecastTime": "2026-09-08T19:00:00",
-      "temperatureC": 29.8
-    },
-    {
-      "forecastTime": "2026-09-08T20:00:00",
-      "temperatureC": 29.3
-    },
-    {
-      "forecastTime": "2026-09-08T21:00:00",
       "temperatureC": 29.2
     },
     {
-      "forecastTime": "2026-09-08T22:00:00",
-      "temperatureC": 29.1
+      "forecastTime": "2026-09-08T20:00:00",
+      "temperatureC": 28.8
     },
     {
-      "forecastTime": "2026-09-08T23:00:00",
-      "temperatureC": 29.0
-    },
-    {
-      "forecastTime": "2026-09-09T00:00:00",
+      "forecastTime": "2026-09-08T21:00:00",
       "temperatureC": 28.9
     },
     {
+      "forecastTime": "2026-09-08T22:00:00",
+      "temperatureC": 28.9
+    },
+    {
+      "forecastTime": "2026-09-08T23:00:00",
+      "temperatureC": 28.8
+    },
+    {
+      "forecastTime": "2026-09-09T00:00:00",
+      "temperatureC": 28.6
+    },
+    {
       "forecastTime": "2026-09-09T01:00:00",
-      "temperatureC": 28.7
+      "temperatureC": 28.4
     },
     {
       "forecastTime": "2026-09-09T02:00:00",
-      "temperatureC": 28.5
+      "temperatureC": 28.2
     },
     {
       "forecastTime": "2026-09-09T03:00:00",
-      "temperatureC": 28.1
+      "temperatureC": 28.0
     },
     {
       "forecastTime": "2026-09-09T04:00:00",
@@ -798,75 +750,75 @@
     },
     {
       "forecastTime": "2026-09-09T05:00:00",
-      "temperatureC": 27.5
+      "temperatureC": 27.4
     },
     {
       "forecastTime": "2026-09-09T06:00:00",
-      "temperatureC": 27.3
+      "temperatureC": 27.0
     },
     {
       "forecastTime": "2026-09-09T07:00:00",
-      "temperatureC": 27.5
+      "temperatureC": 27.0
     },
     {
       "forecastTime": "2026-09-09T08:00:00",
-      "temperatureC": 27.9
+      "temperatureC": 27.4
     },
     {
       "forecastTime": "2026-09-09T09:00:00",
-      "temperatureC": 28.6
+      "temperatureC": 28.4
     },
     {
       "forecastTime": "2026-09-09T10:00:00",
-      "temperatureC": 29.2
-    },
-    {
-      "forecastTime": "2026-09-09T11:00:00",
-      "temperatureC": 29.8
-    },
-    {
-      "forecastTime": "2026-09-09T12:00:00",
-      "temperatureC": 30.2
-    },
-    {
-      "forecastTime": "2026-09-09T13:00:00",
-      "temperatureC": 30.9
-    },
-    {
-      "forecastTime": "2026-09-09T14:00:00",
-      "temperatureC": 31.3
-    },
-    {
-      "forecastTime": "2026-09-09T15:00:00",
-      "temperatureC": 31.2
-    },
-    {
-      "forecastTime": "2026-09-09T16:00:00",
-      "temperatureC": 30.5
-    },
-    {
-      "forecastTime": "2026-09-09T17:00:00",
-      "temperatureC": 30.1
-    },
-    {
-      "forecastTime": "2026-09-09T18:00:00",
-      "temperatureC": 29.6
-    },
-    {
-      "forecastTime": "2026-09-09T19:00:00",
       "temperatureC": 29.3
     },
     {
+      "forecastTime": "2026-09-09T11:00:00",
+      "temperatureC": 30.2
+    },
+    {
+      "forecastTime": "2026-09-09T12:00:00",
+      "temperatureC": 30.6
+    },
+    {
+      "forecastTime": "2026-09-09T13:00:00",
+      "temperatureC": 31.4
+    },
+    {
+      "forecastTime": "2026-09-09T14:00:00",
+      "temperatureC": 32.0
+    },
+    {
+      "forecastTime": "2026-09-09T15:00:00",
+      "temperatureC": 31.9
+    },
+    {
+      "forecastTime": "2026-09-09T16:00:00",
+      "temperatureC": 31.3
+    },
+    {
+      "forecastTime": "2026-09-09T17:00:00",
+      "temperatureC": 30.8
+    },
+    {
+      "forecastTime": "2026-09-09T18:00:00",
+      "temperatureC": 30.0
+    },
+    {
+      "forecastTime": "2026-09-09T19:00:00",
+      "temperatureC": 29.5
+    },
+    {
       "forecastTime": "2026-09-09T20:00:00",
-      "temperatureC": 28.9
+      "temperatureC": 29.0
     },
     {
       "forecastTime": "2026-09-09T21:00:00",
-      "temperatureC": 28.8
+      "temperatureC": 29.0
     },
     {
       "forecastTime": "2026-09-09T22:00:00",
-      "temperatureC": 28.8
+      "temperatureC": 28.9
     },
     {
       "forecastTime": "2026-09-09T23:00:00",
@@ -875,15 +827,127 @@
     {
       "forecastTime": "2026-09-10T00:00:00",
       "temperatureC": 28.5
+    },
+    {
+      "forecastTime": "2026-09-10T01:00:00",
+      "temperatureC": 28.3
+    },
+    {
+      "forecastTime": "2026-09-10T02:00:00",
+      "temperatureC": 28.0
+    },
+    {
+      "forecastTime": "2026-09-10T03:00:00",
+      "temperatureC": 27.6
+    },
+    {
+      "forecastTime": "2026-09-10T04:00:00",
+      "temperatureC": 27.3
+    },
+    {
+      "forecastTime": "2026-09-10T05:00:00",
+      "temperatureC": 27.0
+    },
+    {
+      "forecastTime": "2026-09-10T06:00:00",
+      "temperatureC": 26.8
+    },
+    {
+      "forecastTime": "2026-09-10T07:00:00",
+      "temperatureC": 27.0
+    },
+    {
+      "forecastTime": "2026-09-10T08:00:00",
+      "temperatureC": 27.4
+    },
+    {
+      "forecastTime": "2026-09-10T09:00:00",
+      "temperatureC": 28.3
+    },
+    {
+      "forecastTime": "2026-09-10T10:00:00",
+      "temperatureC": 29.1
+    },
+    {
+      "forecastTime": "2026-09-10T11:00:00",
+      "temperatureC": 30.0
+    },
+    {
+      "forecastTime": "2026-09-10T12:00:00",
+      "temperatureC": 30.3
+    },
+    {
+      "forecastTime": "2026-09-10T13:00:00",
+      "temperatureC": 31.1
+    },
+    {
+      "forecastTime": "2026-09-10T14:00:00",
+      "temperatureC": 31.6
+    },
+    {
+      "forecastTime": "2026-09-10T15:00:00",
+      "temperatureC": 31.9
+    },
+    {
+      "forecastTime": "2026-09-10T16:00:00",
+      "temperatureC": 31.5
+    },
+    {
+      "forecastTime": "2026-09-10T17:00:00",
+      "temperatureC": 31.0
+    },
+    {
+      "forecastTime": "2026-09-10T18:00:00",
+      "temperatureC": 30.2
+    },
+    {
+      "forecastTime": "2026-09-10T19:00:00",
+      "temperatureC": 29.5
+    },
+    {
+      "forecastTime": "2026-09-10T20:00:00",
+      "temperatureC": 29.0
+    },
+    {
+      "forecastTime": "2026-09-10T21:00:00",
+      "temperatureC": 29.0
+    },
+    {
+      "forecastTime": "2026-09-10T22:00:00",
+      "temperatureC": 28.8
+    },
+    {
+      "forecastTime": "2026-09-10T23:00:00",
+      "temperatureC": 28.6
+    },
+    {
+      "forecastTime": "2026-09-11T00:00:00",
+      "temperatureC": 28.3
     }
   ],
   "observedSinceMidnight": {
-    "observationTime": "202609010150",
+    "observationTime": "202609012310",
     "observationDate": "2026-09-01",
-    "maxTemperatureC": 27.5,
-    "minTemperatureC": 27.0,
+    "maxTemperatureC": 28.7,
+    "minTemperatureC": 26.4,
     "stationName": "HK Observatory",
     "provisional": true,
     "incompleteData": false
-  }
+  },
+  "webcamPhotos": [
+    {
+      "id": "HKO",
+      "label": "HKO Headquarters — looking east",
+      "imageUrl": "https://www.hko.gov.hk/wxinfo/aws/hko_mica/hko/latest_HD_HKO.jpg",
+      "sourcePage": "https://www.hko.gov.hk/en/wxinfo/ts/webcam/HKO_photo.htm",
+      "takenAt": "2026-09-01T23:16:17+08:00"
+    },
+    {
+      "id": "HK2",
+      "label": "HKO Headquarters — looking west",
+      "imageUrl": "https://www.hko.gov.hk/wxinfo/aws/hko_mica/hk2/latest_HD_HK2.jpg",
+      "sourcePage": "https://www.hko.gov.hk/en/wxinfo/ts/webcam/HK2_photo.htm",
+      "takenAt": "2026-09-01T23:16:17+08:00"
+    }
+  ]
 }

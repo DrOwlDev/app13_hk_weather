@@ -150,6 +150,22 @@
       font-size: 0.95rem;
     }
 
+    .auto-refresh-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: #52606d;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .auto-refresh-control input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
     @media (prefers-color-scheme: dark) {
       body {
         background: #0f1720;
@@ -230,12 +246,25 @@
       font-size: 0.95rem;
       color: #52606d;
     }
+
+    .portal-iframe-wrap iframe {
+      width: 100%;
+      height: 520px;
+      border: 0;
+      border-radius: 8px;
+      display: block;
+      background: #e4e7eb;
+    }
   </style>
 </head>
 <body>
   <main>
     <h1>HKO OCF Temperature Forecast</h1>
     <div class="actions">
+      <label class="auto-refresh-control">
+        <input id="autoRefreshCheckbox" type="checkbox" checked>
+        Auto refresh this page every 1 minute
+      </label>
       <button id="triggerRefreshBtn" type="button">Trigger data refresh</button>
       <a id="actionsLink" class="button secondary" href="https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml" target="_blank" rel="noopener noreferrer">
         Open GitHub Actions
@@ -259,6 +288,28 @@
       </div>
     </section>
 
+    <section id="webcamPanel" class="panel" hidden>
+      <h2>HKO Webcam Photos</h2>
+      <p class="meta">Latest photos from HKO Headquarters webcams (updated every 5 minutes).</p>
+      <div id="webcamGrid" class="webcam-grid"></div>
+    </section>
+
+    <section class="panel">
+      <h2>HKO Regional Temperature Chart</h2>
+      <p class="meta">
+        Chart from the HKO AWS GIS portal.
+        <a href="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko&amp;ele=Temperature&amp;show=chart" target="_blank" rel="noopener noreferrer">Open on HKO</a>
+      </p>
+      <div class="portal-iframe-wrap">
+        <iframe
+          title="HKO regional temperature chart"
+          src="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko&amp;ele=Temperature&amp;show=chart"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </section>
+
     <section class="panel">
       <h2>Temperature Points</h2>
       <div class="table-wrap">
@@ -274,16 +325,10 @@
         </table>
       </div>
     </section>
-
-    <section id="webcamPanel" class="panel" hidden>
-      <h2>HKO Webcam Photos</h2>
-      <p class="meta">Latest photos from HKO Headquarters webcams (updated every 5 minutes).</p>
-      <div id="webcamGrid" class="webcam-grid"></div>
-    </section>
   </main>
 
   <script>
-    const REFRESH_MS = 5 * 60 * 1000;
+    const AUTO_REFRESH_MS = 60 * 1000;
     const DEFAULT_ACTIONS_URL =
       "https://github.com/DrOwlDev/app13_hk_weather/actions/workflows/update-hko-pages.yml";
     const WEBCAM_PHOTOS = [
@@ -301,6 +346,7 @@
       },
     ];
     let chart;
+    let autoRefreshTimer = null;
     let siteConfig = {
       actionsWorkflowUrl: DEFAULT_ACTIONS_URL,
       refreshProxyUrl: "",
@@ -354,6 +400,39 @@
       } finally {
         button.disabled = false;
       }
+    }
+
+    function isAutoRefreshEnabled() {
+      return document.getElementById("autoRefreshCheckbox").checked;
+    }
+
+    function getAutoRefreshLabel() {
+      return isAutoRefreshEnabled() ? "Auto-refresh every 1 minute" : "Auto-refresh off";
+    }
+
+    function setAutoRefresh(enabled) {
+      if (autoRefreshTimer) {
+        clearInterval(autoRefreshTimer);
+        autoRefreshTimer = null;
+      }
+      if (enabled) {
+        autoRefreshTimer = setInterval(loadData, AUTO_REFRESH_MS);
+      }
+    }
+
+    function initAutoRefresh() {
+      const checkbox = document.getElementById("autoRefreshCheckbox");
+      setAutoRefresh(checkbox.checked);
+      checkbox.addEventListener("change", () => {
+        setAutoRefresh(checkbox.checked);
+        const summary = document.getElementById("summary");
+        if (summary.textContent && !summary.querySelector(".error")) {
+          summary.textContent = summary.textContent.replace(
+            /Auto-refresh (every 1 minute|off)/,
+            getAutoRefreshLabel(),
+          );
+        }
+      });
     }
 
     function parseForecastTime(value) {
@@ -625,7 +704,7 @@
         `(${formatDisplayTime(window.start)} → ${formatDisplayTime(window.end)}) | ` +
         `Model ${formatCompactTimestamp(data.modelTime)} | ` +
         `Updated ${formatCompactTimestamp(data.lastModified)} | ` +
-        `Fetched ${formatDisplayTime(data.fetchedAt)} | Auto-refresh every 5 minutes`;
+        `Fetched ${formatDisplayTime(data.fetchedAt)} | ${getAutoRefreshLabel()}`;
     }
 
     function renderTable(points) {
@@ -800,8 +879,8 @@
     loadConfig().then(() => {
       document.getElementById("triggerRefreshBtn").addEventListener("click", triggerWorkflowRefresh);
     });
+    initAutoRefresh();
     loadData();
-    setInterval(loadData, REFRESH_MS);
   </script>
 </body>
 </html>

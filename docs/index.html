@@ -402,14 +402,6 @@
       }
     }
 
-    function isAutoRefreshEnabled() {
-      return document.getElementById("autoRefreshCheckbox").checked;
-    }
-
-    function getAutoRefreshLabel() {
-      return isAutoRefreshEnabled() ? "Auto-refresh every 1 minute" : "Auto-refresh off";
-    }
-
     function setAutoRefresh(enabled) {
       if (autoRefreshTimer) {
         clearInterval(autoRefreshTimer);
@@ -425,13 +417,6 @@
       setAutoRefresh(checkbox.checked);
       checkbox.addEventListener("change", () => {
         setAutoRefresh(checkbox.checked);
-        const summary = document.getElementById("summary");
-        if (summary.textContent && !summary.querySelector(".error")) {
-          summary.textContent = summary.textContent.replace(
-            /Auto-refresh (every 1 minute|off)/,
-            getAutoRefreshLabel(),
-          );
-        }
       });
     }
 
@@ -528,7 +513,9 @@
 
     function formatDateKeyShort(dateKey) {
       const [y, m, d] = dateKey.split("-").map(Number);
-      return `${d}/${m}/${y}`;
+      const date = new Date(y, m - 1, d);
+      const day = date.toLocaleDateString(undefined, { weekday: "short" });
+      return `${day} ${d}/${m}/${y}`;
     }
 
     function formatTempC(value) {
@@ -658,15 +645,7 @@
       );
       const minLocked = isTempLocked(minSinceMidnight, forecastedMin);
       const maxLocked = isTempLocked(maxSinceMidnight, forecastedMax);
-      const station = data.observedSinceMidnight?.stationName || "HK Observatory";
       const dateLabel = formatDateKeyShort(chartDate);
-      const sourceLabel = stats.source === "observed"
-        ? "HKO observed (provisional)"
-        : "OCF hourly fallback";
-      const obsTime = stats.observationTime
-        ? ` | Obs ${formatObservationTime(stats.observationTime)}`
-        : "";
-      const incomplete = stats.incompleteData ? " Partial 1-minute data." : "";
 
       panel.hidden = false;
       tbody.innerHTML = `
@@ -687,24 +666,19 @@
         </tr>
         <tr>
           <td>Min Temp Status</td>
-          <td class="${minLocked ? "status-locked" : "status-not-locked"}">${minLocked ? "Locked" : "Not Locked"}</td>
+          <td class="${minLocked ? "status-locked" : "status-not-locked"}">${minLocked ? "Likely" : "Moving"}</td>
           <td>Max Temp Status</td>
-          <td class="${maxLocked ? "status-locked" : "status-not-locked"}">${maxLocked ? "Locked" : "Not Locked"}</td>
+          <td class="${maxLocked ? "status-locked" : "status-not-locked"}">${maxLocked ? "Likely" : "Moving"}</td>
         </tr>
       `;
-      meta.textContent =
-        `${station} | ${sourceLabel}${obsTime} | ` +
-        `${remainingOnChartDate.length} forecast hour(s) from now to end of chart date.${incomplete}`;
+      meta.textContent = "";
     }
 
     function renderSummary(data, visibleCount, window) {
       const totalCount = data.temperaturePoints?.length ?? 0;
       document.getElementById("summary").textContent =
-        `Station ${data.stationCode} | Showing ${visibleCount} of ${totalCount} points ` +
-        `(${formatDisplayTime(window.start)} → ${formatDisplayTime(window.end)}) | ` +
-        `Model ${formatCompactTimestamp(data.modelTime)} | ` +
-        `Updated ${formatCompactTimestamp(data.lastModified)} | ` +
-        `Fetched ${formatDisplayTime(data.fetchedAt)} | ${getAutoRefreshLabel()}`;
+        `Showing ${visibleCount} of ${totalCount} points ` +
+        `(${formatDisplayTime(window.start)} → ${formatDisplayTime(window.end)})`;
     }
 
     function renderTable(points) {

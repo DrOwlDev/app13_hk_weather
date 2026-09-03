@@ -268,7 +268,7 @@
       </a>
       <span id="refreshStatus"></span>
     </div>
-    <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
+    <p id="summary" class="meta">Loading data...</p>
 
     <section id="observedPanel" class="panel observed-table-wrap" hidden>
       <div class="table-wrap">
@@ -499,6 +499,38 @@
       return `${truncated.toFixed(1)}°C`;
     }
 
+    function formatHourAmPm(date) {
+      let hour = date.getHours();
+      const suffix = hour >= 12 ? "pm" : "am";
+      hour = hour % 12;
+      if (hour === 0) {
+        hour = 12;
+      }
+      return `${hour}${suffix}`;
+    }
+
+    function findExpectedExtremeTime(remainingPoints, extremeTemp) {
+      const matches = remainingPoints.filter(
+        (point) => Math.abs(Number(point.temperatureC) - Number(extremeTemp)) < 0.05,
+      );
+      if (matches.length === 0) {
+        return null;
+      }
+      matches.sort(
+        (a, b) => parseForecastTime(a.forecastTime) - parseForecastTime(b.forecastTime),
+      );
+      return formatHourAmPm(parseForecastTime(matches[0].forecastTime));
+    }
+
+    function formatForecastedTempCell(value, showTime, remainingPoints) {
+      const tempLabel = formatTempC(value);
+      if (!showTime) {
+        return tempLabel;
+      }
+      const timeLabel = findExpectedExtremeTime(remainingPoints, value);
+      return timeLabel ? `${tempLabel} at ${timeLabel}` : tempLabel;
+    }
+
     function getForecastExtremaForRestOfDay(minSinceMidnight, maxSinceMidnight, remainingPoints) {
       if (remainingPoints.length === 0) {
         return {
@@ -666,9 +698,9 @@
         </tr>
         <tr>
           <td>Forecasted Min Temp</td>
-          <td>${formatTempC(forecastedMin)}</td>
+          <td>${formatForecastedTempCell(forecastedMin, !minLocked, remainingOnChartDate)}</td>
           <td>Forecasted Max Temp</td>
-          <td>${formatTempC(forecastedMax)}</td>
+          <td>${formatForecastedTempCell(forecastedMax, !maxLocked, remainingOnChartDate)}</td>
         </tr>
         <tr>
           <td>Min Temp Status</td>
@@ -680,11 +712,28 @@
       meta.textContent = "";
     }
 
-    function renderSummary(data, visibleCount, window) {
-      const totalCount = data.temperaturePoints?.length ?? 0;
-      document.getElementById("summary").textContent =
-        `Showing ${visibleCount} of ${totalCount} points ` +
-        `(${formatDisplayTime(window.start)} → ${formatDisplayTime(window.end)})`;
+    function formatHongKongTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return String(value ?? "unknown");
+      }
+      return date.toLocaleString("en-GB", {
+        timeZone: "Asia/Hong_Kong",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+    }
+
+    function renderSummary(data) {
+      const fetchedAt = data.fetchedAt;
+      document.getElementById("summary").textContent = fetchedAt
+        ? `Last downloaded ${formatHongKongTime(fetchedAt)} (HK time)`
+        : "Last downloaded time unavailable";
     }
 
     function renderTable(points) {
@@ -838,12 +887,11 @@
         const allPoints = data.temperaturePoints ?? [];
         const window = getChartTimeWindow();
         const visiblePoints = filterPointsByWindow(allPoints, window);
-        renderSummary(data, visiblePoints.length, window);
+        renderSummary(data);
         renderObservedTable(data, window, visiblePoints);
         renderWebcamPhotos(data);
 
         if (allPoints.length === 0) {
-          summary.textContent += " | No temperature points available yet.";
           renderChart([], window);
           renderTable([]);
           return;

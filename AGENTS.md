@@ -10,6 +10,8 @@
 - Wants manual kick-start URLs or options to trigger the GitHub Actions data refresh workflow.
 - Started with data-layer-only Flutter scope; chart visualization lives on GitHub Pages, not in the Flutter app.
 - Prefer parsing the HKO OCF JSON API endpoint over scraping the website chart.
+- Dashboard labels: heading "HK Temperature Forecast"; buttons "Trigger Refresh", "Open HKO", "Predict Lowest", "Predict Highest"; observed table date header as weekday + d/m/y without a "Date (...)" wrapper.
+- Top-bar Polymarket links for today's HK lowest/highest temperature markets using Asia/Hong_Kong date and slug `lowest|highest-temperature-in-hong-kong-on-{month}-{day}-{year}`.
 
 ## Learned Workspace Facts
 
@@ -21,6 +23,6 @@
 - Manual refresh options are documented in README; optional Cloudflare Worker at `workers/hko-refresh-proxy/` enables a one-click browser URL.
 - Data fetch script `scripts/fetch_hko_ocf.py` fetches OCF forecast, HKO observed since-midnight min/max (`latest_since_midnight_maxmin.csv`), and webcam `Last-Modified` timestamps (east HKO + west HK2) into `docs/data.json` as `webcamPhotos`.
 - Chart time window in `docs/index.html` uses `getChartTimeWindow()` (now − 1h → today + 2 days at 01:00), `filterPointsByWindow()`, and a custom `midnightLines` Chart.js plugin.
-- Observed summary table derives chart date from the first visible forecast point; shows since-midnight min/max, forecasted min/max (vs remaining forecast hours on chart date), and Locked/Not Locked status.
-- Dashboard section order in `docs/index.html`: chart → HKO webcam photos → HKO regional portal iframe → temperature points table.
-- HKO regional portal iframe uses `https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko`; `X-Frame-Options: SAMEORIGIN` may block embed on github.io (Open on HKO link is fallback).
+- Observed summary table derives chart date from the first visible forecast point; shows since-midnight min/max, forecasted min/max (vs remaining forecast hours on chart date), and Likely/Moving status.
+- Dashboard section order in `docs/index.html`: chart → HKO webcam photos → temperature points table (regional portal iframe removed).
+- Open HKO is a top-bar button to the HKO regional portal; Polymarket Predict Lowest/Highest buttons open `https://polymarket.com/event/{lowest|highest}-temperature-in-hong-kong-on-{month}-{day}-{year}`.

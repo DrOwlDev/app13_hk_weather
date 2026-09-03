@@ -509,6 +509,52 @@
       return `${hour}${suffix}`;
     }
 
+    function formatHourMinuteAmPm(date) {
+      let hour = date.getHours();
+      const minute = String(date.getMinutes()).padStart(2, "0");
+      const suffix = hour >= 12 ? "pm" : "am";
+      hour = hour % 12;
+      if (hour === 0) {
+        hour = 12;
+      }
+      return `${hour}:${minute}${suffix}`;
+    }
+
+    function parseObservationTimeToDate(value) {
+      const text = String(value ?? "");
+      if (text.length !== 12) {
+        return null;
+      }
+      return new Date(
+        Number(text.slice(0, 4)),
+        Number(text.slice(4, 6)) - 1,
+        Number(text.slice(6, 8)),
+        Number(text.slice(8, 10)),
+        Number(text.slice(10, 12)),
+        0,
+        0,
+      );
+    }
+
+    function formatLatestTemperatureRow(latest) {
+      if (!latest || latest.temperatureC == null) {
+        return "";
+      }
+      const observedAt = parseObservationTimeToDate(latest.observationTime);
+      const timeLabel = observedAt ? formatHourMinuteAmPm(observedAt) : null;
+      const tempLabel = formatTempC(latest.temperatureC);
+      if (!timeLabel) {
+        return `
+        <tr>
+          <td colspan="4">Latest Temp: ${tempLabel}</td>
+        </tr>`;
+      }
+      return `
+        <tr>
+          <td colspan="4">Latest Temp as at ${timeLabel}: ${tempLabel}</td>
+        </tr>`;
+    }
+
     function findExpectedExtremeTime(remainingPoints, extremeTemp) {
       const matches = remainingPoints.filter(
         (point) => Math.abs(Number(point.temperatureC) - Number(extremeTemp)) < 0.05,
@@ -690,6 +736,7 @@
         <tr>
           <td class="date-header" colspan="4">${dateLabel}</td>
         </tr>
+        ${formatLatestTemperatureRow(data.latestTemperature)}
         <tr>
           <td>Min Temp since midnight</td>
           <td>${formatTempC(minSinceMidnight)}</td>

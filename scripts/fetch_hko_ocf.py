@@ -21,6 +21,10 @@ MAXMIN_URL = (
     "https://data.weather.gov.hk/weatherAPI/hko_data/"
     "regional-weather/latest_since_midnight_maxmin.csv"
 )
+LATEST_TEMP_URL = (
+    "https://data.weather.gov.hk/weatherAPI/hko_data/"
+    "regional-weather/latest_1min_temperature.csv"
+)
 WEBCAMS = (
     {
         "id": "HKO",
@@ -100,6 +104,29 @@ def fetch_observed_since_midnight() -> dict:
     raise ValueError(f"Station {OBSERVED_STATION_NAME!r} not found in max/min CSV")
 
 
+def fetch_latest_temperature() -> dict:
+    request = urllib.request.Request(
+        LATEST_TEMP_URL,
+        headers={"User-Agent": "app13-hk-weather/1.0"},
+    )
+    with urllib.request.urlopen(request, timeout=20) as response:
+        body = response.read().decode("utf-8-sig")
+
+    for row in csv.reader(io.StringIO(body)):
+        if len(row) < 3 or row[1] != OBSERVED_STATION_NAME:
+            continue
+        temperature, _incomplete = parse_temperature(row[2])
+        if temperature is None:
+            raise ValueError(f"No temperature for station {OBSERVED_STATION_NAME!r}")
+        return {
+            "observationTime": row[0],
+            "temperatureC": temperature,
+            "stationName": OBSERVED_STATION_NAME,
+        }
+
+    raise ValueError(f"Station {OBSERVED_STATION_NAME!r} not found in latest temperature CSV")
+
+
 def fetch_webcam_taken_at(image_url: str) -> str | None:
     request = urllib.request.Request(
         image_url,
@@ -141,6 +168,7 @@ def build_output(
     payload: dict,
     observed: dict | None = None,
     webcam_photos: list[dict] | None = None,
+    latest_temperature: dict | None = None,
 ) -> dict:
     points = []
     for entry in payload.get("HourlyWeatherForecast", []):
@@ -165,6 +193,8 @@ def build_output(
     }
     if observed is not None:
         output["observedSinceMidnight"] = observed
+    if latest_temperature is not None:
+        output["latestTemperature"] = latest_temperature
     if webcam_photos is not None:
         output["webcamPhotos"] = webcam_photos
     return output
@@ -193,11 +223,16 @@ def main() -> int:
             print(f"Warning: could not fetch observed min/max: {error}", file=sys.stderr)
             observed = None
         try:
+            latest_temperature = fetch_latest_temperature()
+        except (urllib.error.URLError, TimeoutError, ValueError) as error:
+            print(f"Warning: could not fetch latest temperature: {error}", file=sys.stderr)
+            latest_temperature = None
+        try:
             webcam_photos = fetch_webcam_photos()
         except (urllib.error.URLError, TimeoutError, ValueError) as error:
             print(f"Warning: could not fetch webcam photos: {error}", file=sys.stderr)
             webcam_photos = None
-        output = build_output(payload, observed, webcam_photos)
+        output = build_output(payload, observed, webcam_photos, latest_temperature)
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ValueError) as error:
         print(f"Failed to fetch HKO forecast: {error}", file=sys.stderr)
         return 1
@@ -215,6 +250,12 @@ def main() -> int:
         print(
             f"Observed since midnight: min {obs.get('minTemperatureC')}°C, "
             f"max {obs.get('maxTemperatureC')}°C"
+        )
+    if output.get("latestTemperature"):
+        latest = output["latestTemperature"]
+        print(
+            f"Latest temperature: {latest.get('temperatureC')}°C "
+            f"at {latest.get('observationTime')}"
         )
     return 0
 

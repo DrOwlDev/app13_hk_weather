@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HKO OCF Temperature Forecast</title>
+  <title>HK Temperature Forecast</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
@@ -250,21 +250,21 @@
 </head>
 <body>
   <main>
-    <h1>HKO OCF Temperature Forecast</h1>
+    <h1>HK Temperature Forecast</h1>
     <div class="actions">
       <label class="auto-refresh-control">
         <input id="autoRefreshCheckbox" type="checkbox" checked>
         Auto Refresh
       </label>
-      <button id="triggerRefreshBtn" type="button">Trigger data refresh</button>
+      <button id="triggerRefreshBtn" type="button">Trigger Refresh</button>
       <a id="hkoPortalLink" class="button secondary" href="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko" target="_blank" rel="noopener noreferrer">
-        Open on HKO
+        Open HKO
       </a>
       <a id="polymarketLowestLink" class="button secondary" href="#" target="_blank" rel="noopener noreferrer">
-        Bet: Lowest HK Temp
+        Predict Lowest
       </a>
       <a id="polymarketHighestLink" class="button secondary" href="#" target="_blank" rel="noopener noreferrer">
-        Bet: Highest HK Temp
+        Predict Highest
       </a>
       <span id="refreshStatus"></span>
     </div>
@@ -656,7 +656,7 @@
       panel.hidden = false;
       tbody.innerHTML = `
         <tr>
-          <td class="date-header" colspan="4">Date (${dateLabel})</td>
+          <td class="date-header" colspan="4">${dateLabel}</td>
         </tr>
         <tr>
           <td>Min Temp since midnight</td>

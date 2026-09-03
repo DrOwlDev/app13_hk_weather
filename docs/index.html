@@ -260,6 +260,12 @@
       <a id="hkoPortalLink" class="button secondary" href="https://www.hko.gov.hk/en/wxinfo/awsgis/regional_portal.html?loc=hko" target="_blank" rel="noopener noreferrer">
         Open on HKO
       </a>
+      <a id="polymarketLowestLink" class="button secondary" href="#" target="_blank" rel="noopener noreferrer">
+        Bet: Lowest HK Temp
+      </a>
+      <a id="polymarketHighestLink" class="button secondary" href="#" target="_blank" rel="noopener noreferrer">
+        Bet: Highest HK Temp
+      </a>
       <span id="refreshStatus"></span>
     </div>
     <p id="summary" class="meta">Loading forecast for Hong Kong Observatory (HKO)...</p>
@@ -517,6 +523,36 @@
       const m = String(date.getMonth() + 1).padStart(2, "0");
       const d = String(date.getDate()).padStart(2, "0");
       return `${y}-${m}-${d}`;
+    }
+
+    function getHongKongTodaySlugParts() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Hong_Kong",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }).formatToParts(new Date());
+      const get = (type) => parts.find((part) => part.type === type)?.value ?? "";
+      return {
+        month: get("month").toLowerCase(),
+        day: get("day"),
+        year: get("year"),
+      };
+    }
+
+    function buildPolymarketEventUrl(kind) {
+      const { month, day, year } = getHongKongTodaySlugParts();
+      return `https://polymarket.com/event/${kind}-temperature-in-hong-kong-on-${month}-${day}-${year}`;
+    }
+
+    function updatePolymarketLinks() {
+      const lowest = document.getElementById("polymarketLowestLink");
+      const highest = document.getElementById("polymarketHighestLink");
+      if (!lowest || !highest) {
+        return;
+      }
+      lowest.href = buildPolymarketEventUrl("lowest");
+      highest.href = buildPolymarketEventUrl("highest");
     }
 
     function getChartReferenceDate(window, visiblePoints) {
@@ -788,6 +824,7 @@
     }
 
     async function loadData() {
+      updatePolymarketLinks();
       const summary = document.getElementById("summary");
       try {
         const response = await fetch(`./data.json?ts=${Date.now()}`, {
@@ -824,6 +861,7 @@
       document.getElementById("triggerRefreshBtn").addEventListener("click", triggerWorkflowRefresh);
     });
     initAutoRefresh();
+    updatePolymarketLinks();
     loadData();
   </script>
 </body>
